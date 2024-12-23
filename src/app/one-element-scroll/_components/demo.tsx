@@ -1,14 +1,21 @@
 "use client";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { Flip } from "gsap/Flip";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import dynamic from "next/dynamic";
 import React from "react";
 import "./demo.css";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger, Flip);
+
 interface DemoProps {
 	containerRef: React.RefObject<HTMLElement | null>;
 }
 const Demo: React.NamedExoticComponent<DemoProps> = React.memo<DemoProps>(
 	({ containerRef }) => {
 		return (
-			<section ref={containerRef}>
+			<section ref={containerRef} suppressHydrationWarning>
 				<div className="spacer" />
 				<div className="main">
 					<div className="content-container initial">
@@ -31,9 +38,59 @@ function DemoHOC<T extends object>(
 ) {
 	function Base(props: T) {
 		const containerRef = React.useRef<HTMLElement | null>(null);
+		const flipContext = React.useRef<ReturnType<
+			typeof gsap.context
+		> | null>(null);
+		const createTimeline = () => {
+			if (flipContext.current) flipContext.current.revert();
 
+			flipContext.current = gsap.context(() => {
+				const secondState = Flip.getState(".second .marker");
+				const thirdState = Flip.getState(".third .marker");
+				const flipConfig = {
+					ease: "none",
+					duration: 1,
+				};
+
+				const timeline = gsap.timeline({
+					scrollTrigger: {
+						trigger: ".content-container.initial",
+						endTrigger: ".final",
+						start: "clamp(top center)",
+						end: "clamp(top center)",
+						scrub: 1,
+						// markers: true,
+					},
+				});
+
+				timeline
+					.add(
+						Flip.fit(
+							".box",
+							secondState,
+							flipConfig
+						) as GSAPAnimation
+					)
+					.add(
+						Flip.fit(
+							".box",
+							thirdState,
+							flipConfig
+						) as GSAPAnimation,
+						"+=0.5"
+					);
+			});
+		};
+		useGSAP(
+			() => {
+				createTimeline();
+			},
+			{ scope: containerRef }
+		);
 		return <Component {...{ ...props, containerRef }} />;
 	}
 	return Base;
 }
-export default dynamic(() => Promise.resolve(DemoHOC(Demo)));
+export default dynamic(() => Promise.resolve(DemoHOC(Demo)), {
+	ssr: false,
+});
