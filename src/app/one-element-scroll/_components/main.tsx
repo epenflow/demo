@@ -10,7 +10,13 @@ const Main: React.FC<MainProps> = ({ containerRef }) => {
 	return (
 		<main ref={containerRef} suppressHydrationWarning>
 			<section className="content content--initial">
-				<div className="one box" />
+				<div
+					className="one"
+					style={{
+						backgroundImage:
+							'url("https://ucarecdn.com/ebcff02d-688c-4265-b14f-e868d88b3a88/-/preview/999x669/")',
+					}}
+				/>
 			</section>
 			<section className="content content--center content--blend">
 				<div data-step className="content__img" />
@@ -78,7 +84,21 @@ const Main: React.FC<MainProps> = ({ containerRef }) => {
 				<div className="content__img box" />
 				<div className="content__img box" />
 			</section>
-			<section className="h-svh w-full" />
+
+			<section className="outro">
+				<h2 className="outro__title font-alt">More you might like</h2>
+				<div className="card-wrap">
+					{Array.from({ length: 5 }).map((_, key) => (
+						<div key={key} className="card">
+							<div className="card__img box" />
+							<span className="card__title font-cap">
+								Staggered (3D) Grid Animations with
+								Scroll-Triggered Effects
+							</span>
+						</div>
+					))}
+				</div>
+			</section>
 		</main>
 	);
 };
@@ -121,6 +141,8 @@ function MainHOC<T extends object>(
 						Flip.fit(oneElement, state, {
 							duration: 1,
 							ease: index === 0 ? "none" : "sine.inOut",
+							// scale: true,
+							// absolute: true,
 						}) as GSAPAnimation,
 						index ? "+=0.5" : 0
 					);
