@@ -21,10 +21,35 @@ const Scroll: React.NamedExoticComponent<ScrollProps> = React.memo<ScrollProps>(
 						<span>EF-STUDIO</span>
 					</h1>
 				</section>
+				<section className="content content--column">
+					<div className="content__img box" />
+					<div className="content__img box" />
+					<div data-step className="content__img content__img--mid" />
+					<div className="content__img box" />
+					<div className="content__img box" />
+				</section>
+				<section className="content content--lines">
+					<h2 className="content__title content__title--medium font-alt">
+						<span>Natural</span>
+						<div data-step className="content__img" />
+						<span>Garments</span>
+					</h2>
+					<h2 className="content__title content__title--medium font-alt">
+						<span>Crafted with</span>
+						<div className="content__img box" />
+						<span>Love</span>
+					</h2>
+					<h2 className="content__title content__title--medium font-alt">
+						<span>with</span>
+						<div className="content__img box" />
+						<span>respect</span>
+					</h2>
+				</section>
 			</section>
 		);
 	}
 );
+
 function ScrollHOC<T extends object>(
 	Component: React.ComponentType<T & ScrollProps>
 ) {
@@ -42,7 +67,6 @@ function ScrollHOC<T extends object>(
 			const stepElements = [
 				...containerRef.current!.querySelectorAll("[data-step]"),
 			];
-			console.log(stepElements, oneElement, parentElement);
 
 			flipContext.current = gsap.context(() => {
 				const flipConfig = {
@@ -109,6 +133,10 @@ function ScrollHOC<T extends object>(
 		};
 		useGSAP(
 			() => {
+				if (!containerRef.current)
+					throw new Error(
+						"Missing Container Reference : Please ensure containerRef is properly injected."
+					);
 				createFlipOnScrollAnimation();
 				animationSpanOnScroll();
 			},
