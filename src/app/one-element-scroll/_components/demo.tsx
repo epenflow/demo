@@ -1,13 +1,9 @@
 "use client";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { Flip } from "gsap/Flip";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import dynamic from "next/dynamic";
+
+import gsap, { Flip, useGSAP } from "@/libs/config/gsap";
+
 import React from "react";
 import "./demo.css";
-
-gsap.registerPlugin(useGSAP, ScrollTrigger, Flip);
 
 interface DemoProps {
 	containerRef: React.RefObject<HTMLElement | null>;
@@ -91,6 +87,4 @@ function DemoHOC<T extends object>(
 	}
 	return Base;
 }
-export default dynamic(() => Promise.resolve(DemoHOC(Demo)), {
-	ssr: false,
-});
+export default DemoHOC(Demo);
