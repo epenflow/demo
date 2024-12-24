@@ -45,6 +45,34 @@ const Scroll: React.NamedExoticComponent<ScrollProps> = React.memo<ScrollProps>(
 						<span>respect</span>
 					</h2>
 				</section>
+				<section className="content content--sides">
+					<div data-step className="content__img" />
+					<div className="content__text">
+						<p>
+							<strong>Welcome to EF-Studio </strong>
+							Lorem ipsum dolor sit amet consectetur adipisicing
+							elit. Corporis, eveniet ut aliquid amet veniam quos
+							facilis minus excepturi non voluptas earum, ad
+							perspiciatis culpa provident praesentium, doloremque
+							laboriosam modi voluptatibus.
+						</p>
+					</div>
+				</section>
+				<section className="content content--center content--center-tall">
+					<div data-step className="content__img" />
+					<div className="content__text content__text--large">
+						<p>
+							Lorem ipsum dolor sit amet, consectetur adipisicing
+							elit. Incidunt quod ullam dolor, adipisci eveniet
+							eum accusamus nostrum iusto mollitia rem, laborum
+							quibusdam dolores minus eaque dignissimos id aperiam
+							ducimus sequi.
+						</p>
+					</div>
+				</section>
+				<section className="flex items-center justify-center w-full h-svh">
+					<div data-step className="w-full h-full" />
+				</section>
 			</section>
 		);
 	}
@@ -87,7 +115,7 @@ function ScrollHOC<T extends object>(
 						end: "clamp(center center)",
 						scrub: true,
 						immediateRender: false,
-						markers: true,
+						// markers: true,
 					},
 				});
 
@@ -158,6 +186,63 @@ function ScrollHOC<T extends object>(
 				}
 			);
 		};
+
+		const addParallaxToText = () => {
+			const firstTextElement =
+				containerRef.current!.querySelector(".content__text");
+
+			if (!firstTextElement) return;
+
+			gsap.fromTo(
+				firstTextElement,
+				{
+					y: 250,
+				},
+				{
+					y: -250,
+					ease: "sine",
+					scrollTrigger: {
+						trigger: firstTextElement,
+						start: "top bottom",
+						end: "top top",
+						scrub: true,
+					},
+				}
+			);
+		};
+		const addParallaxToColumnImages = () => {
+			const columnImages = [
+				...containerRef.current!.querySelectorAll(
+					".content--column .content__img:not([data-step])"
+				),
+			];
+			const totalImages = columnImages.length;
+			const middleIndex = (totalImages - 1) / 2;
+
+			columnImages.forEach((image, index) => {
+				const intensity = Math.abs(index - middleIndex) * 75;
+
+				gsap.fromTo(
+					image,
+					{
+						y: intensity,
+					},
+					{
+						y: -intensity,
+						ease: "sine",
+						scrollTrigger: {
+							trigger: image,
+							start: "top bottom",
+							end: "bottom top",
+							scrub: true,
+							markers: true,
+						},
+					}
+				);
+			});
+		};
+		// const animateRelatedDemos = () => {};
+
 		useGSAP(
 			() => {
 				if (!containerRef.current)
@@ -171,6 +256,8 @@ function ScrollHOC<T extends object>(
 				createFlipOnScrollAnimation(oneElement, parentElement);
 				animationSpanOnScroll();
 				animateFilterOnFirstSwitch(oneElement, parentElement);
+				addParallaxToText();
+				addParallaxToColumnImages();
 			},
 			{ scope: containerRef }
 		);
