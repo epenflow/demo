@@ -82,9 +82,35 @@ function ScrollHOC<T extends object>(
 				});
 			});
 		};
+
+		const animationSpanOnScroll = () => {
+			const spans = containerRef.current!.querySelectorAll(
+				".content__title > span"
+			);
+
+			spans.forEach((span, index) => {
+				const direction = index % 2 === 0 ? -150 : 150;
+				const triggerElement = span.closest(".content--center")
+					? span.parentElement
+					: span;
+
+				gsap.from(span, {
+					x: direction,
+					duration: 1,
+					ease: "sine",
+					scrollTrigger: {
+						trigger: triggerElement,
+						start: "top bottom",
+						end: "+=45%",
+						scrub: true,
+					},
+				});
+			});
+		};
 		useGSAP(
 			() => {
 				createFlipOnScrollAnimation();
+				animationSpanOnScroll();
 			},
 			{ scope: containerRef }
 		);
