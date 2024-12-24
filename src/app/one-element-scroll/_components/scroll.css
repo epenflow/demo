@@ -1,9 +1,26 @@
+:root{
+	font-size: 16px;
+	--color-text: #503717;
+	--color-bg: rgb(234 234 234);
+	--color-link: #b19162;
+	--color-link-hover: #e1c093;
+	--color-title: #000;
+	--page-padding: 2rem;
+	--gradient-1: rgb(234 234 234 / 80%);
+	--gradient-2: rgb(229 134 27 / 30%);
+}
 body {
 	background-image: var(--background);
 	background-size: var(--background-size);
 	background-position: var(--background-position);
-	background-color: whitesmoke;
-	color: wheat;
+	background-color: burlywood;
+	color: var(--color-text);
+	width: 100vw;
+}
+
+.font-alt {
+	font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+	font-weight: 500;
 }
 
 .one {
@@ -16,40 +33,15 @@ body {
 	will-change: transform, width, height, filter;
 }
 
-.font-alt {
-	font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-	font-weight: 500;
-}
+
 
 .box {
 	background: var(--gradient-blue), var(--gradient-texture);
+	width: 100%;
+	height: 100%;
 	background-blend-mode: color-dodge;
 }
-.content--blend {
-	/* mix-blend-mode: overlay; */
-}
 
-.content__img {
-	background-size: cover;
-	background-position: 50% 50%;
-	will-change: transform, height, width, filter;
-}
-
-.content__title {
-	grid-area: content;
-	margin: 0;
-	line-height: 0.9;
-	text-transform: uppercase;
-	font-size: clamp(3rem, 19vw, 8rem);
-	max-width: 1000px;
-	color: wheat;
-}
-
-.content__title--medium {
-	line-height: 1.1.;
-	max-width: none;
-	font-size: clamp(2rem, 12vw, 6rem);
-}
 
 .content {
 	width: 100%;
@@ -61,12 +53,42 @@ body {
 	position: relative;
 	z-index: 90;
 }
+
+.content--blend {
+	mix-blend-mode: overlay;
+}
+
+.content__img {
+	background-size: cover;
+	background-position: 50% 50%;
+	will-change: transform, filter, opacity;
+}
+
+.content__title {
+	grid-area: content;
+	margin: 0;
+	line-height: 0.9;
+	text-transform: uppercase;
+	font-size: clamp(3rem, 19vw, 8rem);
+	max-width: 1000px;
+	color: wheat;
+}
+.content__title span{
+	display: inline-block;
+}
+.content__title--medium {
+	line-height: 1.1.;
+	max-width: none;
+	font-size: clamp(2rem, 12vw, 6rem);
+}
+
 .content--center {
 	height: 100vh;
 	text-align: center;
 	justify-items: center;
 	display: grid;
-	align-items: center;
+	gap: 1.5rem;
+	align-content: center;
 	position: relative;
 }
 .content--center .content__img {

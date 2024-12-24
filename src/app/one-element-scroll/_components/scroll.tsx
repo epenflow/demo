@@ -59,11 +59,12 @@ function ScrollHOC<T extends object>(
 			typeof gsap.context
 		> | null>(null);
 
-		const createFlipOnScrollAnimation = () => {
+		const createFlipOnScrollAnimation = (
+			oneElement: Element | null,
+			parentElement: HTMLElement | null
+		) => {
 			if (flipContext.current) flipContext.current.revert();
 
-			const oneElement = containerRef.current!.querySelector(".one");
-			const parentElement = oneElement!.parentElement;
 			const stepElements = [
 				...containerRef.current!.querySelectorAll("[data-step]"),
 			];
@@ -131,14 +132,45 @@ function ScrollHOC<T extends object>(
 				});
 			});
 		};
+
+		const animateFilterOnFirstSwitch = (
+			oneElement: Element | null,
+			parentElement: HTMLElement | null
+		) => {
+			gsap.fromTo(
+				oneElement,
+				{
+					filter: "brightness(80%)",
+					// // if not set the height
+					// width: "100%",
+					// height: "100%",
+				},
+				{
+					filter: "brightness(100%)",
+					ease: "sine",
+					scrollTrigger: {
+						trigger: parentElement,
+						start: "clamp(top bottom)",
+						end: "clamp(bottom top)",
+						scrub: true,
+						// markers: true,
+					},
+				}
+			);
+		};
 		useGSAP(
 			() => {
 				if (!containerRef.current)
 					throw new Error(
 						"Missing Container Reference : Please ensure containerRef is properly injected."
 					);
-				createFlipOnScrollAnimation();
+
+				const oneElement = containerRef.current!.querySelector(".one");
+				const parentElement = oneElement!.parentElement;
+
+				createFlipOnScrollAnimation(oneElement, parentElement);
 				animationSpanOnScroll();
+				animateFilterOnFirstSwitch(oneElement, parentElement);
 			},
 			{ scope: containerRef }
 		);
