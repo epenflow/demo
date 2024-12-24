@@ -53,6 +53,33 @@ function ScrollHOC<T extends object>(
 				const states = stepElements.map((stepElement) =>
 					Flip.getState(stepElement)
 				);
+
+				const timeline = gsap.timeline({
+					scrollTrigger: {
+						trigger: parentElement,
+						start: "clamp(center center)",
+						endTrigger: stepElements[stepElements.length - 1],
+						end: "clamp(center center)",
+						scrub: true,
+						immediateRender: false,
+						markers: true,
+					},
+				});
+
+				states.forEach((state, index) => {
+					const customFlipConfig = {
+						...flipConfig,
+						ease: index === 0 ? "none" : flipConfig.ease,
+					};
+					timeline.add(
+						Flip.fit(
+							oneElement,
+							state,
+							customFlipConfig
+						) as GSAPAnimation,
+						index ? "+=0.5" : 0
+					);
+				});
 			});
 		};
 		useGSAP(
