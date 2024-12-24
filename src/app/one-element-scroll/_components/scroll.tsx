@@ -1,5 +1,5 @@
 "use client";
-import gsap, { Flip, useGSAP } from "@/libs/config/gsap";
+import gsap, { Flip, useGSAP } from "@/config/gsap";
 import React from "react";
 import "./scroll.css";
 

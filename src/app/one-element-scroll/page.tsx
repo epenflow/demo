@@ -1,8 +1,5 @@
-import Scroll from "./_components/scroll";
+import Main from "./_components/main";
+
 export default function Page() {
-	return (
-		<main>
-			<Scroll />
-		</main>
-	);
+	return <Main />;
 }
