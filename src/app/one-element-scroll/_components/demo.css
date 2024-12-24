@@ -1,14 +1,4 @@
-:root {
-	--gradient-texture: url("https://assets.codepen.io/16327/noise-e82662fe.png");
-	--gradient-blue: radial-gradient(
-		78.77% 78.77% at 71.71% 30.77%,
-		#f0fcff 0%,
-		#9bedff 67.21%,
-		#98ecff 76.04%,
-		#5be1ff 84.9%,
-		#00bae2 94.79%
-	);
-}
+
 body {
 	background-image: var(--background);
 	background-size: var(--background-size);
