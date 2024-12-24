@@ -8,18 +8,11 @@
 		#5be1ff 84.9%,
 		#00bae2 94.79%
 	);
-	--gradient-background: linear-gradient(
-			rgba(255, 255, 255, 0.05) 2px,
-			transparent 2px
-		),
-		linear-gradient(90deg, rgba(255, 255, 255, 0.05) 2px, transparent 2px),
-		linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-		linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
 }
 body {
-	background-image: var(--gradient-background);
-	background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
-	background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+	background-image: var(--background);
+	background-size: var(--background-size);
+	background-position: var(--background-position);
 	background-color: black;
 }
 .spacer {
