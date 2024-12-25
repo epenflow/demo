@@ -1,0 +1,90 @@
+:root {
+	--color-surface-white: #fffce1;
+}
+body {
+	background-image: linear-gradient(
+			rgba(255, 255, 255, 0.05) 2px,
+			transparent 2px
+		),
+		linear-gradient(90deg, rgba(255, 255, 255, 0.05) 2px, transparent 2px),
+		linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+	background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+	background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+	background-color: black;
+}
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+.spacer {
+	width: 100%;
+	height: 20vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.main {
+	position: relative;
+	height: 100vh;
+	min-height: 800px;
+}
+
+.container {
+	position: absolute;
+	width: 140px;
+	height: 140px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 2px dashed var(--color-surface-white);
+	border-radius: 10px;
+}
+
+.initial {
+	left: 60%;
+	top: 10%;
+}
+
+.box {
+	width: 100px;
+	height: 100px;
+	position: relative;
+	z-index: 10;
+	border-radius: 10px;
+}
+
+.initial .box {
+	width: 300px;
+	height: 300px;
+}
+.gradient-blue {
+	background: var(--gradient-blue), var(--gradient-texture);
+	background-blend-mode: color-dodge;
+}
+.second {
+	left: 10%;
+	top: 50%;
+}
+
+.marker {
+	border-radius: 10px;
+}
+
+.second .marker {
+	width: 100px;
+	height: 100px;
+}
+
+.third {
+	right: 10%;
+	bottom: 3rem;
+}
+
+.third .marker {
+	width: 100px;
+	height: 100px;
+}
