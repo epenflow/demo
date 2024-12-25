@@ -108,9 +108,6 @@ function MainHOC<T extends object>(
 ) {
 	function Base(props: T) {
 		const containerRef = React.useRef<HTMLElement | null>(null);
-		const flipContext = React.useRef<ReturnType<
-			typeof gsap.context
-		> | null>(null);
 
 		function createFlipOnScrollAnimation(
 			oneElement: Element | null,
@@ -119,34 +116,30 @@ function MainHOC<T extends object>(
 			const stepElements: HTMLElement[] =
 				gsap.utils.toArray("[data-step]");
 
-			if (flipContext.current) flipContext.current.revert();
+			const states = stepElements.map((step) => Flip.getState(step));
 
-			flipContext.current = gsap.context(() => {
-				const states = stepElements.map((step) => Flip.getState(step));
+			const timeline = gsap.timeline({
+				scrollTrigger: {
+					trigger: parentElement,
+					start: "clamp(center center)",
+					endTrigger: stepElements[stepElements.length - 1],
+					end: "clamp(center center)",
+					scrub: true,
+					immediateRender: false,
+					// markers: true,
+				},
+			});
 
-				const timeline = gsap.timeline({
-					scrollTrigger: {
-						trigger: parentElement,
-						start: "clamp(center center)",
-						endTrigger: stepElements[stepElements.length - 1],
-						end: "clamp(center center)",
-						scrub: true,
-						immediateRender: false,
-						// markers: true,
-					},
-				});
-
-				states.forEach((state, index) => {
-					timeline.add(
-						Flip.fit(oneElement, state, {
-							duration: 1,
-							ease: index === 0 ? "none" : "sine.inOut",
-							// scale: true,
-							// absolute: true,
-						}) as GSAPAnimation,
-						index ? "+=0.5" : 0
-					);
-				});
+			states.forEach((state, index) => {
+				timeline.add(
+					Flip.fit(oneElement, state, {
+						duration: 1,
+						ease: index === 0 ? "none" : "sine.inOut",
+						// scale: true,
+						// absolute: true,
+					}) as GSAPAnimation,
+					index ? "+=0.5" : 0
+				);
 			});
 		}
 
@@ -306,7 +299,7 @@ function MainHOC<T extends object>(
 					animateFilterOnFirstSwitch(oneElement);
 				});
 			},
-			{ scope: containerRef, dependencies: [] }
+			{ scope: containerRef }
 		);
 		return <Component {...props} containerRef={containerRef} />;
 	}
