@@ -230,8 +230,8 @@ function MainHOC<T extends object>(
 				oneElement,
 				{
 					filter: "brightness(80%)",
-					width: "100%",
-					height: "100%",
+					// width: "100%",
+					// height: "100%",
 				},
 				{
 					filter: "brightness(100%)",
