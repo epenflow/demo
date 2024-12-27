@@ -1,5 +1,5 @@
 "use client";
-import { useGSAP } from "@/config/gsap";
+import gsap, { Flip, useGSAP } from "@/config/gsap";
 import React from "react";
 import "./main.css";
 
@@ -9,20 +9,15 @@ interface MainProps {
 const Main: React.FC<MainProps> = ({ scope }) => {
 	return (
 		<main ref={scope}>
-			<div className="spacer">scroll down</div>
-			<div className="main">
-				<div className="container initial">
-					<div className="box gradient-blue"></div>
-				</div>
-				<div className="container second">
-					<div data-step className="marker"></div>
-				</div>
-				<div className="container third">
-					<div data-step className="marker"></div>
-				</div>
-			</div>
-
-			<div className="spacer final"></div>
+			<section className="section">
+				<div className="box" />
+			</section>
+			<section className="section two">
+				<div className="middle" />
+			</section>
+			<section className="section">
+				<div className="final" />
+			</section>
 		</main>
 	);
 };
@@ -32,9 +27,38 @@ function MainHOC<T extends object>(
 	function Base(props: T) {
 		const scope = React.useRef<HTMLElement | null>(null);
 
-		function flipOnScrollAnimate() {}
+		function flipOnScrollAnimate() {
+			const box = scope.current!.querySelector(".box");
+			const middle = scope.current!.querySelector(".middle");
+			const final = scope.current!.querySelector(".final");
+			const timeline = gsap.timeline();
+			timeline.set(box, {
+				width: "100%",
+				height: "100%",
+			});
+			timeline
+				.add(
+					Flip.fit(box, middle, {
+						duration: 2,
+						ease: "none",
+					}) as GSAPAnimation,
+					"+=0.5"
+				)
+				.add(
+					Flip.fit(box, final, {
+						duration: 2,
+						ease: "none",
+					}) as GSAPAnimation,
+					"+=0.5"
+				);
+		}
 
-		useGSAP(() => {}, { scope });
+		useGSAP(
+			() => {
+				flipOnScrollAnimate();
+			},
+			{ scope }
+		);
 
 		return <Component {...props} scope={scope} />;
 	}
