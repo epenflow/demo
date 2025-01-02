@@ -1,7 +1,9 @@
 "use client";
-import gsap, { Flip, useGSAP } from "@/config/gsap";
+import { useGSAP } from "@gsap/react";
+import { Flip, gsap } from "gsap/all";
 import React from "react";
 import "./main.css";
+// gsap.registerPlugin(useGSAP, Flip, ScrollTrigger);
 
 export interface MainProps {
 	containerRef: React.RefObject<HTMLElement | null>;
@@ -126,7 +128,6 @@ function MainHOC<T extends object>(
 					end: "clamp(center center)",
 					scrub: true,
 					immediateRender: false,
-					// markers: true,
 				},
 			});
 
@@ -161,7 +162,6 @@ function MainHOC<T extends object>(
 						start: "top bottom",
 						end: "+45%",
 						scrub: true,
-						// markers: true,
 					},
 				});
 			});
@@ -191,7 +191,6 @@ function MainHOC<T extends object>(
 							start: "top bottom",
 							end: "end+=45%",
 							scrub: true,
-							// markers: true,
 						},
 					}
 				);
@@ -217,7 +216,6 @@ function MainHOC<T extends object>(
 						start: "top bottom",
 						end: "top top",
 						scrub: true,
-						// markers: true,
 					},
 				}
 			);
@@ -239,7 +237,6 @@ function MainHOC<T extends object>(
 						start: "clamp(top bottom)",
 						end: "clamp(bottom top)",
 						scrub: true,
-						// markers: true,
 					},
 				}
 			);
@@ -268,7 +265,6 @@ function MainHOC<T extends object>(
 							start: "top bottom",
 							end: "bottom top",
 							scrub: true,
-							// markers: true,
 						},
 					}
 				);
