@@ -18,7 +18,7 @@ export default {
 			},
 			fontFamily: {
 				inter: 'var(--font-inter)',
-				victorMono: 'var(--font-victor-mono)',
+				'victor-mono': 'var(--font-victor-mono)',
 			},
 			colors: {
 				border: 'hsl(var(--border))',

@@ -5,6 +5,7 @@ const inter = Inter({
 });
 const victorMono = Victor_Mono({
 	variable: '--font-victor-mono',
+	subsets: ['latin'],
 });
 const fonts = {
 	inter: inter.variable,

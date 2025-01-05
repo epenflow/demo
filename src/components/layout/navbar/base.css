@@ -2,7 +2,7 @@
 
 @layer components {
 	.header-container {
-		@apply bg-gray-500 text-white;
+		@apply bg-card border-b;
 		width: 100%;
 		display: flex;
 		align-items: center;
@@ -17,7 +17,7 @@
 		padding: 0.5rem 0;
 	}
 
-	.navbar-select {
-		@apply text-sm font-inter font-medium;
+	.navbar-heading {
+		@apply text-primary/80 font-victor-mono italic;
 	}
 }
