@@ -2,11 +2,16 @@ import dynamic from "next/dynamic";
 import React from "react";
 
 const AppLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
-	const { Lenis } = resources;
-	return <Lenis root>{children}</Lenis>;
-	// return children;
+	const { Navbar, Lenis } = resources;
+	return (
+		<Lenis root>
+			<Navbar />
+			{children}
+		</Lenis>
+	);
 };
 const resources = {
-	Lenis: dynamic(() => import("@/components/lenis")),
+	Navbar: dynamic(() => import("@/components/layout/navbar")),
+	Lenis: dynamic(() => import("@/components/layout/lenis")),
 };
 export default AppLayout;

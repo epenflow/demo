@@ -1,7 +1,12 @@
+import dynamic from "next/dynamic";
+
 export default function Home() {
-	return (
-		<main>
-			<h1>Hello World!</h1>
-		</main>
-	);
+	return Object.entries(resources.Views).map(([key, Component]) => (
+		<Component key={key} />
+	));
 }
+const resources = {
+	Views: {
+		Test: dynamic(() => import("@/components/views/test")),
+	},
+};

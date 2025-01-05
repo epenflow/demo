@@ -1,0 +1,23 @@
+@tailwind components;
+
+@layer components {
+	.header-container {
+		@apply bg-gray-500 text-white;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 2.25rem;
+	}
+	.navbar {
+		@apply container font-medium font-inter;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0.5rem 0;
+	}
+
+	.navbar-select {
+		@apply text-sm font-inter font-medium;
+	}
+}
