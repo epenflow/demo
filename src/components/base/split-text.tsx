@@ -1,9 +1,10 @@
+import { cn } from '@/libs/utils';
 import React from 'react';
 
 interface Props extends React.ComponentProps<'div'> {
 	type?: 'char' | 'word';
 }
-const SplitText: React.FC<Props> = ({ type = 'char', children }) => {
+const SplitText: React.FC<Props> = ({ type = 'char', children, ...rest }) => {
 	const splitter = type === 'char' ? '' : /(?=\s)|(?<=\s)/;
 	if (Array.isArray(children)) {
 		let $children: Array<{
@@ -31,13 +32,15 @@ const SplitText: React.FC<Props> = ({ type = 'char', children }) => {
 		});
 
 		return (
-			<div className="inline-block overflow-hidden">
+			<div
+				{...rest}
+				className="inline-block overflow-hidden">
 				{$children.map((child, key) => {
 					const Element = child.type || 'span';
 					return (
 						<Element
 							key={key}
-							className={child.className}>
+							className={cn(child.className, 'inline-block overflow-hidden')}>
 							{child.children?.split(splitter).map((result, index) => (
 								<span
 									data-splitter
@@ -55,7 +58,9 @@ const SplitText: React.FC<Props> = ({ type = 'char', children }) => {
 
 	if (typeof children === 'string') {
 		return (
-			<div className="inline-block overflow-hidden">
+			<div
+				{...rest}
+				className="inline-block overflow-hidden">
 				{children.split(splitter).map((result, key) => (
 					<span
 						data-splitter
@@ -67,5 +72,7 @@ const SplitText: React.FC<Props> = ({ type = 'char', children }) => {
 			</div>
 		);
 	}
+
+	return null;
 };
 export default SplitText;

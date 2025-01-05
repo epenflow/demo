@@ -16,11 +16,7 @@ const Navbar: React.FC<Props> = ({ scope }) => {
 			className="header-container">
 			<nav className="navbar">
 				<section className="navbar-heading">
-					<SplitText>
-						<span className="font-inter">sds </span>
-						<br />
-						<span>sds</span>
-					</SplitText>
+					<SplitText>Demo</SplitText>
 				</section>
 			</nav>
 		</header>
