@@ -1,10 +1,11 @@
 'use client';
 import SplitText from '@/components/base/split-text';
 import { useGSAP } from '@gsap/react';
-import gsap from 'gsap';
+import { gsap, ScrollTrigger } from 'gsap/all';
 import React from 'react';
 import './base.css';
-gsap.registerPlugin(useGSAP);
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 interface Props {
 	scope: React.RefObject<HTMLElement | null>;
@@ -39,6 +40,7 @@ const resources = {
 function hoc<T extends object>(Component: React.ComponentType<T & Props>) {
 	return function $hoc(props: T) {
 		const scope = React.useRef<HTMLElement>(null);
+
 		useGSAP(
 			() => {
 				const heading = gsap.utils.toArray('[data-splitter]');
@@ -50,7 +52,25 @@ function hoc<T extends object>(Component: React.ComponentType<T & Props>) {
 						amount: 1,
 					},
 				});
-				console.log({ heading });
+
+				const headerTween = gsap
+					.to(scope.current, {
+						yPercent: -100,
+						paused: true,
+						duration: 0.25,
+						ease: 'sine.inOut',
+					})
+					.progress(1);
+
+				ScrollTrigger.create({
+					start: 'top top',
+					end: 'max',
+					markers: true,
+					onUpdate(self) {
+						console.log(self);
+						self.direction === 1 ? headerTween.play() : headerTween.reverse();
+					},
+				});
 			},
 			{ scope },
 		);
