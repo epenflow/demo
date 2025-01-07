@@ -23,7 +23,7 @@ const Default: React.FC<Props> = ({ scope }) => {
 };
 
 function hoc<T extends object>(Component: React.ComponentType<T & Props>) {
-	return function $hoc(props: T) {
+	return function HOC(props: T) {
 		const scope = React.useRef<HTMLElement>(null);
 		useGSAP(
 			() => {

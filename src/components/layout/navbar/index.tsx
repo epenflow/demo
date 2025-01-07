@@ -36,22 +36,9 @@ const Navbar: React.FC<Props> = ({ scope }) => {
 		</header>
 	);
 };
-const resources = {
-	select: {
-		default: '',
-		options: [
-			{
-				label: 'Scroll Trigger',
-				value: 'test',
-			},
-		] satisfies Array<{
-			value: string;
-			label: string;
-		}>,
-	},
-};
+
 function hoc<T extends object>(Component: React.ComponentType<T & Props>) {
-	return function $hoc(props: T) {
+	return function HOC(props: T) {
 		const scope = React.useRef<HTMLElement>(null);
 
 		useGSAP(
