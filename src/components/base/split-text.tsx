@@ -7,7 +7,8 @@ interface Props extends React.ComponentProps<'div'> {
 const SplitText: React.FC<Props> = ({ type = 'char', children, ...rest }) => {
 	const splitter = type === 'char' ? '' : /(?=\s)|(?<=\s)/;
 	if (Array.isArray(children)) {
-		let $children: Array<{
+		/* eslint-disable @typescript-eslint/no-explicit-any */
+		const $children: Array<{
 			children?: string;
 			className?: string;
 			type?: string | React.JSXElementConstructor<any>;
