@@ -8,7 +8,7 @@ type Process = Record<
 	string,
 	{
 		title: string;
-		Component: React.ComponentType<{}>;
+		Component: React.ComponentType<object>;
 	}
 >;
 export const directory: Process = {
@@ -26,7 +26,7 @@ export const directory: Process = {
 	},
 };
 function useProcessContext() {
-	const [process, $setProcess] = React.useState<Process>({});
+	const [process, $setProcess] = React.useState<Process>(Object.create(null) as Process);
 
 	const setProcess = React.useCallback(
 		({ event, key }: { event?: React.MouseEvent; key: string }) => {
