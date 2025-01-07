@@ -1,9 +1,11 @@
-"use client";
-import { ScrollTrigger, gsap } from "gsap/all";
-import { useLenis } from "lenis/react";
-import React from "react";
+/* eslint-disable import/no-anonymous-default-export */
+'use client';
+import { ScrollTrigger, gsap } from 'gsap/all';
+import { useLenis } from 'lenis/react';
+import React from 'react';
 gsap.registerPlugin(ScrollTrigger);
 
+/* eslint-disable react/display-name */
 export default function () {
 	const lenis = useLenis();
 
@@ -25,7 +27,9 @@ export default function () {
 		<div className="h-[2000svh] relative">
 			<p>Test</p>
 			<button onClick={scrollToBottom}>Bottom</button>
-			<button className="absolute bottom-0" onClick={scrollToTop}>
+			<button
+				className="absolute bottom-0"
+				onClick={scrollToTop}>
 				scroll
 			</button>
 		</div>
