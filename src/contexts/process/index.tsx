@@ -45,5 +45,5 @@ function useProcessContext() {
 	};
 }
 
-export const { Provider: ProcessProvider, useContext: useProcess } =
-	ContextFactory(useProcessContext);
+const { Provider, useContext } = ContextFactory(useProcessContext);
+export { Provider as ProcessProvider, useContext as useProcess };
