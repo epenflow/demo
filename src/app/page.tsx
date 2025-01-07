@@ -1,7 +1,9 @@
 'use client';
 
-import Default from '@/components/views/default';
 import { useProcess } from '@/contexts/process';
+import dynamic from 'next/dynamic';
+
+const Default = dynamic(() => import('@/components/views/default'));
 
 export default function Home() {
 	const { process = {} } = useProcess();
