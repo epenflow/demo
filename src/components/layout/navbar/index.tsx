@@ -66,8 +66,12 @@ function hoc<T extends object>(Component: React.ComponentType<T & Props>) {
 					start: 'top top',
 					end: 'max',
 					markers: process.env.NODE_ENV == 'development',
-					onUpdate(self) {
-						self.direction === 1 ? tween.play() : tween.reverse();
+					onUpdate: (self) => {
+						if (self.direction === 1) {
+							tween.play();
+						} else {
+							tween.reverse();
+						}
 					},
 				});
 			},
