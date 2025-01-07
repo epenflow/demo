@@ -1,5 +1,6 @@
 'use client';
 import SplitText from '@/components/base/split-text';
+import { directory, useProcess } from '@/contexts/process';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from 'gsap/all';
 import React from 'react';
@@ -11,13 +12,25 @@ interface Props {
 	scope: React.RefObject<HTMLElement | null>;
 }
 const Navbar: React.FC<Props> = ({ scope }) => {
+	const { setProcess } = useProcess();
 	return (
 		<header
 			ref={scope}
 			className="header-container">
 			<nav className="navbar">
-				<section className="navbar-heading">
+				<section
+					data-magnet-hover
+					className="navbar-heading">
 					<SplitText>Demo</SplitText>
+				</section>
+				<section>
+					{Object.entries(directory).map(([key, { title }]) => (
+						<button
+							key={key}
+							onClick={(event) => setProcess({ key, event })}>
+							{title}
+						</button>
+					))}
 				</section>
 			</nav>
 		</header>
@@ -43,32 +56,31 @@ function hoc<T extends object>(Component: React.ComponentType<T & Props>) {
 
 		useGSAP(
 			() => {
-				const heading = gsap.utils.toArray('[data-splitter]');
-				gsap.from(heading, {
+				const headings: HTMLElement[] = gsap.utils.toArray('[data-splitter]');
+
+				const tween = gsap
+					.to(scope.current, {
+						yPercent: -100,
+						duration: 0.5,
+						paused: true,
+					})
+					.progress(0);
+				gsap.from(headings, {
 					yPercent: 100,
+					xPercent: 100,
 					ease: 'sine.inOut',
 					stagger: {
 						each: 0.5,
-						amount: 1,
+						amount: 0.5,
 					},
 				});
-
-				const headerTween = gsap
-					.to(scope.current, {
-						yPercent: -100,
-						paused: true,
-						duration: 0.25,
-						ease: 'sine.inOut',
-					})
-					.progress(1);
 
 				ScrollTrigger.create({
 					start: 'top top',
 					end: 'max',
-					markers: true,
+					markers: process.env.NODE_ENV == 'development',
 					onUpdate(self) {
-						console.log(self);
-						self.direction === 1 ? headerTween.play() : headerTween.reverse();
+						self.direction === 1 ? tween.play() : tween.reverse();
 					},
 				});
 			},

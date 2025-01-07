@@ -1,3 +1,4 @@
+import { ProcessProvider } from '@/contexts/process';
 import dynamic from 'next/dynamic';
 import React from 'react';
 
@@ -5,8 +6,10 @@ const AppLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const { Navbar, Lenis } = resources;
 	return (
 		<Lenis root>
-			<Navbar />
-			{children}
+			<ProcessProvider>
+				<Navbar />
+				{children}
+			</ProcessProvider>
 		</Lenis>
 	);
 };

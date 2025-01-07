@@ -16,7 +16,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body
-				suppressHydrationWarning
+				suppressHydrationWarning={process.env.NODE_ENV === 'production'}
 				className={cn('antialiased', fonts.inter, fonts.victorMono)}>
 				<AppLayout>{children}</AppLayout>
 			</body>
