@@ -1,7 +1,7 @@
-"use client";
-import gsap from "gsap";
-import { LenisProps, LenisRef, ReactLenis } from "lenis/react";
-import React from "react";
+'use client';
+import gsap from 'gsap';
+import { LenisProps, LenisRef, ReactLenis } from 'lenis/react';
+import React from 'react';
 
 const Lenis: React.FC<
 	LenisProps & {
@@ -16,7 +16,7 @@ const Lenis: React.FC<
 		}
 		gsap.ticker.add(update);
 		return () => gsap.ticker.remove(update);
-	}, []);
+	}, [frameRate]);
 
 	return (
 		<ReactLenis
