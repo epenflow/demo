@@ -26,7 +26,7 @@ function hoc<T extends object>(Component: React.ComponentType<T & Props>) {
 	return function HOC(props: T) {
 		const scope = React.useRef<HTMLElement>(null);
 		useGSAP(
-			() => {
+			(context, contextSafe) => {
 				const squares: Array<HTMLElement> = [];
 				const squareSize = Number(
 					getComputedStyle(document.documentElement)
@@ -34,7 +34,7 @@ function hoc<T extends object>(Component: React.ComponentType<T & Props>) {
 						.match(/\d+/)?.[0],
 				);
 
-				if (scope.current) {
+				if (scope.current && contextSafe) {
 					function setupSquare(size: number) {
 						const numOfColumn = Math.ceil(window.innerWidth / size);
 						const numOfRow = Math.ceil(window.innerHeight / size);
@@ -63,39 +63,49 @@ function hoc<T extends object>(Component: React.ComponentType<T & Props>) {
 
 					scope.current.style.width = containerWidth;
 					scope.current.style.height = containerHeight;
-					createSquare(numOfSquare);
+					const init = contextSafe(() => createSquare(numOfSquare));
+					init();
+					window.addEventListener('resize', init);
 
-					window.addEventListener('resize', () => {
-						createSquare(squareSize);
-					});
+					return () => {
+						window.removeEventListener('resize', init);
+					};
 				}
 			},
 			{ scope },
 		);
 
 		useGSAP(
-			() => {
+			(context, contextSafe) => {
 				const boxes: HTMLElement[] = gsap.utils.toArray('.view--box');
-				boxes.forEach((box) => {
-					box.addEventListener('mousemove', () => {
-						gsap.to(box, {
-							keyframes: {
-								backgroundColor: ['red', 'yellow', 'green'],
-							},
-							borderRadius: '2.5rem',
-							duration: 0.5,
+				if (contextSafe) {
+					boxes.forEach((box) => {
+						const mousemove = contextSafe(() => {
+							gsap.to(box, {
+								keyframes: {
+									backgroundColor: ['red', 'yellow', 'green'],
+								},
+								borderRadius: '2.5rem',
+								duration: 0.5,
+							});
 						});
-					});
+						const mouseleave = contextSafe(() => {
+							gsap.to(box, {
+								keyframes: {
+									borderRadius: [2, 0],
+									backgroundColor: ['red', 'yellow', 'green', 'transparent'],
+								},
+							});
+						});
+						box.addEventListener('mousemove', mousemove);
+						box.addEventListener('mouseleave', mouseleave);
 
-					box.addEventListener('mouseleave', () => {
-						gsap.to(box, {
-							keyframes: {
-								borderRadius: [2, 0],
-								backgroundColor: ['red', 'yellow', 'green', 'transparent'],
-							},
-						});
+						return () => {
+							box.removeEventListener('mousemove', mousemove);
+							box.removeEventListener('mouseleave', mouseleave);
+						};
 					});
-				});
+				}
 			},
 			{ scope },
 		);
