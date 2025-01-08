@@ -1,5 +1,13 @@
 'use client';
 import SplitText from '@/components/base/split-text';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from 'gsap/all';
 import React from 'react';
@@ -11,28 +19,61 @@ interface Props {
 	scope: React.RefObject<HTMLElement | null>;
 }
 const Navbar: React.FC<Props> = ({ scope }) => {
+	const { dropdowns } = resources;
+
+	function onClick(href: string) {
+		window.location.replace(href);
+	}
+
 	return (
 		<header
 			ref={scope}
 			className="header-container">
 			<nav className="navbar">
-				<section
-					data-magnet-hover
-					className="navbar-heading">
+				<section className="navbar-heading">
 					<SplitText>Demo</SplitText>
+				</section>
+				<section className="navbar-dropdown">
+					<DropdownMenu>
+						<DropdownMenuTrigger>Select Pages</DropdownMenuTrigger>
+						<DropdownMenuContent>
+							<DropdownMenuLabel>Trigger</DropdownMenuLabel>
+							<DropdownMenuSeparator />
+							{dropdowns.map(({ title, href }, key) => (
+								<DropdownMenuItem
+									key={key}
+									onClick={() => onClick(href)}>
+									{title}
+								</DropdownMenuItem>
+							))}
+						</DropdownMenuContent>
+					</DropdownMenu>
+				</section>
+				<section>
+					<h1>Test</h1>
 				</section>
 			</nav>
 		</header>
 	);
 };
-
+const resources = {
+	dropdowns: [
+		{
+			title: 'Home',
+			href: './',
+		},
+		{
+			title: 'clip path scroll',
+			href: './clip-path-scroll',
+		},
+	] satisfies Array<{ title: string; href: string }>,
+};
 function hoc<T extends object>(Component: React.ComponentType<T & Props>) {
 	return function HOC(props: T) {
 		const scope = React.useRef<HTMLElement>(null);
 
 		useGSAP(
 			() => {
-				console.log('gsap render');
 				const headings: HTMLElement[] = gsap.utils.toArray('[data-splitter]');
 
 				const tween = gsap
