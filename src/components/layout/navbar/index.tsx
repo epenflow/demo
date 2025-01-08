@@ -57,7 +57,6 @@ function hoc<T extends object>(Component: React.ComponentType<T & Props>) {
 					end: 'max',
 					markers: process.env.NODE_ENV == 'development',
 					onUpdate: (self) => {
-						console.log(self);
 						if (self.direction === 1) {
 							tween.play();
 						} else {
