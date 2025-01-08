@@ -1,6 +1,6 @@
 'use client';
 import { useGSAP } from '@gsap/react';
-import { gsap } from 'gsap/all';
+import gsap from 'gsap/all';
 import React from 'react';
 import './base.css';
 
@@ -33,7 +33,7 @@ function hoc<T extends object>(Component: React.ComponentType<T & Props>) {
 						.getPropertyValue('--box-size')
 						.match(/\d+/)?.[0],
 				);
-				console.log(squareSize);
+
 				if (scope.current) {
 					function setupSquare(size: number) {
 						const numOfColumn = Math.ceil(window.innerWidth / size);
@@ -64,6 +64,7 @@ function hoc<T extends object>(Component: React.ComponentType<T & Props>) {
 					scope.current.style.width = containerWidth;
 					scope.current.style.height = containerHeight;
 					createSquare(numOfSquare);
+
 					window.addEventListener('resize', () => {
 						createSquare(squareSize);
 					});

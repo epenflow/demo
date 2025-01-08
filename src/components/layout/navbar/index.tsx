@@ -1,6 +1,5 @@
 'use client';
 import SplitText from '@/components/base/split-text';
-import { directory, useProcess } from '@/contexts/process';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from 'gsap/all';
 import React from 'react';
@@ -12,7 +11,6 @@ interface Props {
 	scope: React.RefObject<HTMLElement | null>;
 }
 const Navbar: React.FC<Props> = ({ scope }) => {
-	const { setProcess } = useProcess();
 	return (
 		<header
 			ref={scope}
@@ -22,15 +20,6 @@ const Navbar: React.FC<Props> = ({ scope }) => {
 					data-magnet-hover
 					className="navbar-heading">
 					<SplitText>Demo</SplitText>
-				</section>
-				<section>
-					{Object.entries(directory).map(([key, { title }]) => (
-						<button
-							key={key}
-							onClick={(event) => setProcess({ key, event })}>
-							{title}
-						</button>
-					))}
 				</section>
 			</nav>
 		</header>
@@ -43,6 +32,7 @@ function hoc<T extends object>(Component: React.ComponentType<T & Props>) {
 
 		useGSAP(
 			() => {
+				console.log('gsap render');
 				const headings: HTMLElement[] = gsap.utils.toArray('[data-splitter]');
 
 				const tween = gsap
@@ -67,6 +57,7 @@ function hoc<T extends object>(Component: React.ComponentType<T & Props>) {
 					end: 'max',
 					markers: process.env.NODE_ENV == 'development',
 					onUpdate: (self) => {
+						console.log(self);
 						if (self.direction === 1) {
 							tween.play();
 						} else {
