@@ -4,7 +4,6 @@ import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
@@ -31,16 +30,16 @@ const Navbar: React.FC<Props> = ({ scope }) => {
 			className="header-container">
 			<nav className="navbar">
 				<section className="navbar-heading">
-					<SplitText>Demo</SplitText>
+					<SplitText>Demo by--EF//@epenflow</SplitText>
 				</section>
 				<section className="navbar-dropdown">
 					<DropdownMenu>
 						<DropdownMenuTrigger>Select Pages</DropdownMenuTrigger>
 						<DropdownMenuContent>
-							<DropdownMenuLabel>Trigger</DropdownMenuLabel>
 							<DropdownMenuSeparator />
 							{dropdowns.map(({ title, href }, key) => (
 								<DropdownMenuItem
+									className="dropdown-item"
 									key={key}
 									onClick={() => onClick(href)}>
 									{title}
@@ -48,9 +47,6 @@ const Navbar: React.FC<Props> = ({ scope }) => {
 							))}
 						</DropdownMenuContent>
 					</DropdownMenu>
-				</section>
-				<section>
-					<h1>Test</h1>
 				</section>
 			</nav>
 		</header>
