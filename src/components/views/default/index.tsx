@@ -1,4 +1,5 @@
 'use client';
+import { getComputeGridDimensions, getPropertyValue } from '@/libs/utils';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap/all';
 import React from 'react';
@@ -25,52 +26,28 @@ const Default: React.FC<Props> = ({ scope }) => {
 function hoc<T extends object>(Component: React.ComponentType<T & Props>) {
 	return function HOC(props: T) {
 		const scope = React.useRef<HTMLElement>(null);
-		useGSAP(
-			(context, contextSafe) => {
-				const squares: Array<HTMLElement> = [];
-				const squareSize = Number(
-					getComputedStyle(document.documentElement)
-						.getPropertyValue('--box-size')
-						.match(/\d+/)?.[0],
-				);
+		const { contextSafe } = useGSAP({ scope });
 
-				if (scope.current && contextSafe) {
-					function setupSquare(size: number) {
-						const numOfColumn = Math.ceil(window.innerWidth / size);
-						const numOfRow = Math.ceil(window.innerHeight / size);
-						const numOfSquare = numOfColumn * numOfRow;
-						const containerWidth = `${numOfColumn * size}px`;
-						const containerHeight = `${numOfRow * size}px`;
-						return {
-							numOfColumn,
-							numOfRow,
-							numOfSquare,
-							containerHeight,
-							containerWidth,
-						};
-					}
+		const loadGrid = contextSafe(() => {
+			const size = Number(getPropertyValue('--box-size').match(/\d+/)?.[0]);
+			const { ceil } = getComputeGridDimensions(size);
 
-					function createSquare(numOfSquare: number) {
-						for (let i = 0; i < numOfSquare; i++) {
-							const square = document.createElement('div');
-							square.classList.add('view--box');
-							scope.current?.appendChild(square);
-							squares.push(square);
-						}
-					}
-					const { numOfSquare, containerHeight, containerWidth } =
-						setupSquare(squareSize);
-
-					scope.current.style.width = containerWidth;
-					scope.current.style.height = containerHeight;
-					const init = contextSafe(() => createSquare(numOfSquare));
-					init();
-					window.addEventListener('resize', init);
-
-					return () => {
-						window.removeEventListener('resize', init);
-					};
+			function createSquares(parent: HTMLElement | null, ceil: number, className?: string) {
+				for (let index = 0; index < ceil; index++) {
+					const div = document.createElement('div');
+					div.classList.add(className || '');
+					parent?.appendChild(div);
 				}
+			}
+
+			createSquares(scope.current, ceil, 'view--box');
+		});
+
+		useGSAP(
+			() => {
+				loadGrid();
+				window.addEventListener('resize', loadGrid);
+				return () => window.addEventListener('resize', loadGrid);
 			},
 			{ scope },
 		);

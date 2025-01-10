@@ -24,6 +24,7 @@
     background-color: transparent;
     position: relative;
     mix-blend-mode: difference;
+    flex-grow: 1;
   }
   .default--view-content {
     @apply font-inter font-bold text-5xl;
