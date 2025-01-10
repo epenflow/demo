@@ -9,3 +9,13 @@ export function getPropertyValue(property: string, element?: Element) {
 
 	return getComputedStyle($element).getPropertyValue(property);
 }
+
+export function getComputeGridDimensions(size: number) {
+	const row = Math.ceil(window.innerWidth / size);
+	const column = Math.ceil(window.innerHeight / 2);
+	const ceil = column * row;
+	const width = row * size;
+	const height = column * size;
+
+	return { row, column, ceil, width, height };
+}
