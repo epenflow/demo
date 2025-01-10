@@ -26,11 +26,4 @@
   .navbar-heading {
     @apply text-primary/80 text-sm;
   }
-  .navbar-dropdown {
-    @apply border rounded-full text-sm hover:bg-accent;
-    padding: 0.25rem 0.75rem;
-  }
-  .dropdown-item {
-    text-transform: capitalize;
-  }
 }

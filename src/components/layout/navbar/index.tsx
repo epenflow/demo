@@ -1,12 +1,6 @@
 'use client';
 import SplitText from '@/components/base/split-text';
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from 'gsap/all';
 import React from 'react';
@@ -20,8 +14,8 @@ interface Props {
 const Navbar: React.FC<Props> = ({ scope }) => {
 	const { dropdowns } = resources;
 
-	function onClick(href: string) {
-		window.location.replace(href);
+	function select(value: string) {
+		window.location.replace(value);
 	}
 
 	return (
@@ -29,24 +23,24 @@ const Navbar: React.FC<Props> = ({ scope }) => {
 			ref={scope}
 			className="header-container">
 			<nav className="navbar">
-				<section className="navbar-heading">
-					<SplitText>Demo by--EF//@epenflow</SplitText>
+				<section
+					suppressHydrationWarning
+					className="navbar-heading">
+					<SplitText>EF//@epenflow</SplitText>
 				</section>
-				<section className="navbar-dropdown">
-					<DropdownMenu>
-						<DropdownMenuTrigger>Select Pages</DropdownMenuTrigger>
-						<DropdownMenuContent>
-							<DropdownMenuSeparator />
+				<section>
+					<Select onValueChange={select}>
+						<SelectTrigger>Select Pages</SelectTrigger>
+						<SelectContent>
 							{dropdowns.map(({ title, href }, key) => (
-								<DropdownMenuItem
-									className="dropdown-item"
+								<SelectItem
 									key={key}
-									onClick={() => onClick(href)}>
+									value={href}>
 									{title}
-								</DropdownMenuItem>
+								</SelectItem>
 							))}
-						</DropdownMenuContent>
-					</DropdownMenu>
+						</SelectContent>
+					</Select>
 				</section>
 			</nav>
 		</header>
