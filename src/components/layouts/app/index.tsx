@@ -5,16 +5,14 @@ import { isProduction } from '~/libs/utils';
 const App = () => {
 	const { Navbar, DisableReactDevtools, TanstackRouterDevtools, Lenis } = resources;
 	return (
-		<>
+		<React.Suspense>
 			<Lenis root>
 				<Navbar />
 				<Outlet />
-				<React.Suspense>
-					<DisableReactDevtools condition={isProduction()} />
-					<TanstackRouterDevtools />
-				</React.Suspense>
+				<DisableReactDevtools condition={isProduction()} />
+				<TanstackRouterDevtools />
 			</Lenis>
-		</>
+		</React.Suspense>
 	);
 };
 const resources = {
