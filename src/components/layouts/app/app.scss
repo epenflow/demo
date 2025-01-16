@@ -1,0 +1,10 @@
+@use 'tailwindcss/components';
+
+
+@layer components {
+    .link--text {
+        &.active {
+            @apply text-red-500 font-bold;
+        }
+    }
+}

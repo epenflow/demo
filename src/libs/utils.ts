@@ -1,21 +1,38 @@
-import { ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-export function cn(...args: ClassValue[]) {
-	return twMerge(clsx(args));
+export function isObject(data: unknown) {
+	const type = typeof data;
+	return type === 'function' || (type === 'object' && !!data);
+}
+export function hasWindowObject() {
+	return typeof window !== 'undefined' && window.document;
+}
+export function isFunction(data: unknown) {
+	return typeof data === 'function';
+}
+export function isProduction() {
+	return import.meta.env.PROD;
+}
+declare global {
+	interface Window {
+		/* eslint-disable @typescript-eslint/no-explicit-any */
+		__REACT_DEVTOOLS_GLOBAL_HOOK__: any;
+	}
 }
 
-export function getPropertyValue(property: string, element?: Element) {
-	const $element = element || document.documentElement;
-
-	return getComputedStyle($element).getPropertyValue(property);
-}
-
-export function getComputeGridDimensions(size: number) {
-	const row = Math.ceil(window.innerWidth / size);
-	const column = Math.ceil(window.innerHeight / 2);
-	const ceil = column * row;
-	const width = row * size;
-	const height = column * size;
-
-	return { row, column, ceil, width, height };
+export function disableReactDevTools() {
+	if (hasWindowObject()) {
+		if (!isObject(window.__REACT_DEVTOOLS_GLOBAL_HOOK__)) {
+			return;
+		}
+		for (const key in window.__REACT_DEVTOOLS_GLOBAL_HOOK__) {
+			if (key === 'renderers') {
+				window.__REACT_DEVTOOLS_GLOBAL_HOOK__[key] = new Map();
+				continue;
+			}
+			window.__REACT_DEVTOOLS_GLOBAL_HOOK__[key] = isFunction(
+				window.__REACT_DEVTOOLS_GLOBAL_HOOK__[key],
+			)
+				? Function.prototype
+				: null;
+		}
+	}
 }
