@@ -1,7 +1,8 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
+import withLoader from '~/components/layouts/loader/hoc';
 
 export const Route = createLazyFileRoute('/')({
-	component: Index,
+	component: withLoader(Index),
 });
 
 function Index() {

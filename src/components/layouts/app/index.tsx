@@ -1,7 +1,6 @@
 import { Outlet } from '@tanstack/react-router';
 import React from 'react';
 import { isProduction } from '~/libs/utils';
-import './app.scss';
 
 const App = () => {
 	const { Navbar, DisableReactDevtools, TanstackRouterDevtools } = resources;
