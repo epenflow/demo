@@ -1,5 +1,5 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-import withLoader from '~/components/layouts/loader/hoc';
+import withLoader from '~/components/layouts/loader';
 
 export const Route = createLazyFileRoute('/')({
 	component: withLoader(Index),

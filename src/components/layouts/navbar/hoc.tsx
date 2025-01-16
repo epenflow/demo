@@ -1,7 +1,7 @@
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import React from 'react';
-import { useLoader } from '../loader/hook';
+import { useLoader } from '~/components/layouts/loader';
 export interface Props {
 	scope: React.RefObject<HTMLElement>;
 }
@@ -25,17 +25,37 @@ export default function hoc<T extends object>(Component: React.ComponentType<T &
 								duration: 0.5,
 							},
 						})
-						.to(headerInner, {
-							width: '20rem',
-						})
-						.to(button, {
-							ease: 'linear',
-							left: `calc(20rem - 1rem)`,
-						})
-						.to(scope.current, {
-							duration: 1,
-							height: `calc(100svh - calc(var(--header-top) * 2))`,
-						})
+						.to(
+							headerInner,
+							{
+								width: '20rem',
+							},
+							0,
+						)
+						.to(
+							button,
+							{
+								ease: 'linear',
+								left: `calc(20rem - 1rem)`,
+							},
+							0.5,
+						)
+						.to(
+							scope.current,
+							{
+								duration: 1,
+								height: `calc(100svh - calc(var(--header-top) * 2))`,
+							},
+							0.5,
+						)
+						.from(
+							headerContent,
+							{
+								autoAlpha: 0,
+								display: 'none',
+							},
+							0,
+						)
 						.from(spans, {
 							yPercent: -100,
 							xPercent: -100,

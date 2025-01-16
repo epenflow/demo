@@ -1,25 +1,71 @@
-import type React from 'react';
-import { type Props } from './hoc';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import React from 'react';
+import { create } from 'zustand';
+import Loader from '~/components/layouts/loader/component';
 
-const Loader: React.FC<Props> = ({ scope }) => {
-	return (
-		<div
-			ref={scope}
-			className="h-svh w-full fixed top-0 z-50 flex">
-			{Array.from({ length: 10 }).map((_, key) => {
-				const CSSVariables = {
-					'--loader-width': `10%`,
-				} as React.CSSProperties;
-				return (
-					<div
-						data-loader
-						key={key}
-						style={CSSVariables}
-						className="w-[var(--loader-width)] h-full flex-grow bg-white"
-					/>
-				);
-			})}
-		</div>
-	);
-};
-export default Loader;
+interface LoaderContext {
+	duration: number;
+	setDuration: (time: number) => void;
+}
+
+export const useLoader = create<LoaderContext>((setter) => ({
+	duration: 0,
+	setDuration(time: number) {
+		setter({ duration: time });
+	},
+}));
+
+export interface Props {
+	scope: React.RefObject<HTMLDivElement>;
+}
+export default function withLoader<T extends object>(Component: React.ComponentType<T>) {
+	return function HOC(props: T) {
+		const [isActive, setActive] = React.useState<boolean>(true);
+		const { duration } = useLoader();
+		const scope = React.useRef<HTMLDivElement>(null);
+
+		useGSAP(
+			(_, contextSafe) => {
+				if (contextSafe && scope.current) {
+					const init = contextSafe(() => {
+						const loader: HTMLDivElement[] = gsap.utils.toArray('[data-loader]');
+						const stagger = {
+							each: 0.5,
+							amount: 1,
+						};
+						if (duration > 0) {
+							gsap.from(loader, {
+								height: '0%',
+								autoAlpha: 0,
+								stagger,
+							});
+						}
+						gsap.to(loader, 1, {
+							height: '0%',
+							ease: 'sine.inOut',
+							autoAlpha: 0,
+							delay: duration,
+							onComplete: () => {
+								setActive(false);
+							},
+							stagger,
+						});
+					});
+
+					init();
+					window.addEventListener('resize', init);
+					return window.removeEventListener('resize', init);
+				}
+			},
+			{ scope: scope, dependencies: [duration, isActive] },
+		);
+
+		return (
+			<>
+				{isActive && <Loader scope={scope} />}
+				<Component {...props} />
+			</>
+		);
+	};
+}
