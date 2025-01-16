@@ -3,15 +3,17 @@ import React from 'react';
 import { isProduction } from '~/libs/utils';
 
 const App = () => {
-	const { Navbar, DisableReactDevtools, TanstackRouterDevtools } = resources;
+	const { Navbar, DisableReactDevtools, TanstackRouterDevtools, Lenis } = resources;
 	return (
 		<>
-			<Navbar />
-			<Outlet />
-			<React.Suspense>
-				<DisableReactDevtools condition={isProduction()} />
-				<TanstackRouterDevtools />
-			</React.Suspense>
+			<Lenis root>
+				<Navbar />
+				<Outlet />
+				<React.Suspense>
+					<DisableReactDevtools condition={isProduction()} />
+					<TanstackRouterDevtools />
+				</React.Suspense>
+			</Lenis>
 		</>
 	);
 };
@@ -25,5 +27,6 @@ const resources = {
 				})),
 			),
 	Navbar: React.lazy(() => import('~/components/layouts/navbar')),
+	Lenis: React.lazy(() => import('~/components/layouts/lenis')),
 };
 export default App;
