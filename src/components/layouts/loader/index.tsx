@@ -20,7 +20,7 @@ export interface Props {
 	scope: React.RefObject<HTMLDivElement>;
 }
 export default function withLoader<T extends object>(Component: React.ComponentType<T>) {
-	return function HOC(props: T) {
+	function HOC(props: T) {
 		const [isActive, setActive] = React.useState<boolean>(true);
 		const { duration } = useLoader();
 		const scope = React.useRef<HTMLDivElement>(null);
@@ -67,5 +67,6 @@ export default function withLoader<T extends object>(Component: React.ComponentT
 				<Component {...props} />
 			</>
 		);
-	};
+	}
+	return React.memo(HOC);
 }

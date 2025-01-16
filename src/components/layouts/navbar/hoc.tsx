@@ -6,7 +6,7 @@ export interface Props {
 	scope: React.RefObject<HTMLElement>;
 }
 export default function hoc<T extends object>(Component: React.ComponentType<T & Props>) {
-	return function HOC(props: T) {
+	function HOC(props: T) {
 		const scope = React.useRef<HTMLElement>(null);
 		const { setDuration } = useLoader();
 		useGSAP(
@@ -90,8 +90,9 @@ export default function hoc<T extends object>(Component: React.ComponentType<T &
 					});
 				}
 			},
-			{ scope },
+			{ scope, dependencies: [setDuration] },
 		);
 		return <Component {...{ ...props, scope }} />;
-	};
+	}
+	return React.memo(HOC);
 }
