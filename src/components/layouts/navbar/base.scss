@@ -1,8 +1,5 @@
 @use 'tailwindcss/components';
 
-
-
-
 :root {
     --header-padding: 0.5rem;
     --header-top: 25px;
@@ -11,6 +8,9 @@
     --header-axis: 50%;
     --button-size: var(--header-radius);
     --header-zIndex: 99999;
+    --header-contentTop: calc(var(--button-size) + var(--header-padding));
+    --header-contentWidth: calc(100% - calc(var(--header-padding) * 2));
+    --header-contentHeight: calc(100% - calc(var(--header-contentTop) + calc(var(--header-padding) * 2)));
 }
 
 @layer components {
@@ -27,7 +27,6 @@
         border-radius: var(--header-radius);
         z-index: var(--header-zIndex);
         overflow: hidden;
-
         will-change: height;
 
         .header--inner {
@@ -49,37 +48,66 @@
 
         .header--content {
             position: absolute;
-            width: 100%;
-            top: calc(var(--button-size) + var(--header-padding));
+            width: var(--header-contentWidth);
+            height: var(--header-contentHeight);
+            top: var(--header-contentTop);
             left: var(--header-axis);
             transform: translate(calc(-1 * var(--header-axis)), 0%);
-            padding: var(--header-padding);
+            padding: 0rem calc(var(--header-padding) * 2);
+            margin: var(--header-padding) 0rem;
             display: flex;
             flex-direction: column;
             gap: 0.25rem;
+            overflow-y: scroll;
 
-            a {
-                @apply text-white/70 font-normal;
-                overflow: hidden;
-                position: relative;
-
-                &.active {
-                    @apply text-white font-medium;
-                }
-
-                span {
-                    display: inline-block;
-                    will-change: transform;
-                }
-
-                :hover {
-                    @apply text-white;
-                }
-
-
+            &::-webkit-scrollbar-thumb {
+                @apply bg-white/10;
+                border: 4px solid transparent;
+                border-radius: var(--header-radius);
+                min-height: calc(var(--header-contentHeight) / 2);
+                background-clip: content-box;
             }
 
-        }
+            &::-webkit-scrollbar {
+                width: var(--button-size);
+                background-color: transparent;
+            }
 
+            a {
+
+                .text--content {
+                    @apply text-white/70 transition-colors duration-500 ease-in-out font-medium;
+                }
+
+                .separator {
+                    @apply bg-white/10 transition-colors duration-500 ease-in-out;
+                    display: block;
+                    width: 100%;
+                    height: 1px;
+                }
+
+                &.active {
+                    .text--content {
+                        @apply text-transparent bg-clip-text bg-gradient-to-b via-slate-100 from-slate-100 to-indigo-600;
+                    }
+
+                    .separator {
+                        @apply bg-gradient-to-l from-slate-100 to-indigo-600;
+                    }
+                }
+
+                div {
+                    height: fit-content;
+                    overflow: hidden;
+                    position: relative;
+
+                    span {
+                        display: inline-block;
+                        will-change: transform;
+                    }
+
+                }
+            }
+        }
     }
 }

@@ -44,7 +44,7 @@ export default function hoc<T extends object>(Component: React.ComponentType<T &
 							scope.current,
 							{
 								duration: 1,
-								height: `calc(100svh - calc(var(--header-top) * 2))`,
+								height: `calc(50svh - calc(var(--header-top) * 2))`,
 							},
 							0.5,
 						)
@@ -62,8 +62,8 @@ export default function hoc<T extends object>(Component: React.ComponentType<T &
 							rotateY: 45,
 							ease: 'sine.inOut',
 							stagger: {
-								each: 0.5,
-								amount: 0.5,
+								each: 0.25,
+								amount: 0.25,
 							},
 						});
 					let isActive = false;
