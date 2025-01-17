@@ -22,7 +22,7 @@
         top: var(--header-top);
         left: var(--header-axis);
         transform: translate(calc(-1 * var(--header-axis)), 0%);
-        height: calc(var(--button-size) * 2);
+        // height: calc(var(--button-size) * 2);
         padding: var(--header-padding);
         border-radius: var(--header-radius);
         z-index: var(--header-zIndex);
@@ -96,7 +96,7 @@
                     }
                 }
 
-                div {
+                p {
                     height: fit-content;
                     overflow: hidden;
                     position: relative;

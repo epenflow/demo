@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { Link } from '@tanstack/react-router';
 import React from 'react';
+import type { FileRouteTypes } from '~/routeTree.gen';
 import './base.scss';
 import hoc, { type Props } from './hoc';
 
@@ -20,10 +21,10 @@ const Navbar: React.FC<Props> = ({ scope }) => {
 					<Link
 						key={key}
 						to={to}>
-						<div>
+						<p>
 							<span className="text--content ">{title}</span>
 							<span className="separator" />
-						</div>
+						</p>
 					</Link>
 				))}
 			</nav>
@@ -42,5 +43,5 @@ const resources = {
 			to: '/about',
 			title: 'About',
 		},
-	] satisfies Array<{ to: string; title: string }>,
+	] satisfies Array<{ to: FileRouteTypes['to']; title: string }>,
 };

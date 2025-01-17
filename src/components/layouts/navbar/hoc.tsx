@@ -2,6 +2,7 @@ import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import React from 'react';
 import { useLoader } from '~/components/layouts/loader';
+import TextAnimator from '~/libs/modules/text-animator';
 export interface Props {
 	scope: React.RefObject<HTMLElement>;
 }
@@ -28,7 +29,7 @@ export default function hoc<T extends object>(Component: React.ComponentType<T &
 						.to(
 							headerInner,
 							{
-								width: '20rem',
+								'--header-width': '20rem',
 							},
 							0,
 						)
@@ -91,6 +92,22 @@ export default function hoc<T extends object>(Component: React.ComponentType<T &
 				}
 			},
 			{ scope, dependencies: [setDuration] },
+		);
+
+		useGSAP(
+			(_, contextSafe) => {
+				if (!contextSafe) return;
+				const textContent: HTMLElement[] = gsap.utils.toArray('.text--content');
+				textContent.forEach((text) => {
+					const animator = new TextAnimator(text);
+					const animate = contextSafe(() => {
+						animator.animate();
+					});
+					text.addEventListener('mouseenter', animate);
+					return () => text.removeEventListener('mouseenter', animate);
+				});
+			},
+			{ scope },
 		);
 		return <Component {...{ ...props, scope }} />;
 	}

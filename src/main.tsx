@@ -1,4 +1,3 @@
-import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './main.scss';
 
@@ -11,8 +10,4 @@ declare module '@tanstack/react-router' {
 		router: typeof router;
 	}
 }
-createRoot(document.getElementById('body--container')!).render(
-	<StrictMode>
-		<RouterProvider router={router} />
-	</StrictMode>,
-);
+createRoot(document.getElementById('body--container')!).render(<RouterProvider router={router} />);

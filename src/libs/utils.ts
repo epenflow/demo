@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export function isObject(data: unknown) {
 	const type = typeof data;
 	return type === 'function' || (type === 'object' && !!data);
@@ -13,7 +14,6 @@ export function isProduction() {
 }
 declare global {
 	interface Window {
-		/* eslint-disable @typescript-eslint/no-explicit-any */
 		__REACT_DEVTOOLS_GLOBAL_HOOK__: any;
 	}
 }
@@ -36,3 +36,13 @@ export function disableReactDevTools() {
 		}
 	}
 }
+
+export const debounce = <T extends (...args: any[]) => void>(fn: T, delay: number) => {
+	let timerId: NodeJS.Timeout;
+	return (...args: Parameters<T>) => {
+		clearTimeout(timerId);
+		timerId = setTimeout(() => {
+			fn.apply(this, args);
+		}, delay);
+	};
+};
