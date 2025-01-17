@@ -5,24 +5,25 @@ import type { FileRouteTypes } from '~/routeTree.gen';
 import './base.scss';
 import hoc, { type Props } from './hoc';
 
-const Navbar: React.FC<Props> = ({ scope }) => {
+const Navbar: React.FC<Props> = ({ scope, fnToggleMenu }) => {
 	const { navigation } = resources;
 	return (
 		<header
 			ref={scope}
 			className="header--outer">
 			<div className="header--inner">
-				<button />
+				<button onClick={fnToggleMenu} />
 			</div>
 			<nav
 				data-lenis-prevent
 				className="header--content">
 				{navigation.map(({ to, title }, key) => (
 					<Link
+						onClick={fnToggleMenu}
 						key={key}
 						to={to}>
 						<p>
-							<span className="text--content ">{title}</span>
+							<span className="text--content">{title}</span>
 							<span className="separator" />
 						</p>
 					</Link>
