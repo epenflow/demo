@@ -2,17 +2,18 @@ import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import React from 'react';
 import { create } from 'zustand';
-import Loader from '~/components/layouts/loader/component';
+
+const Loader = React.lazy(() => import('~/components/layouts/loader/component'));
 
 interface LoaderContext {
-	duration: number;
-	setDuration: (time: number) => void;
+	loaderDuration: number;
+	setLoaderDuration: (time: number) => void;
 }
 
 export const useLoader = create<LoaderContext>((setter) => ({
-	duration: 0,
-	setDuration(time: number) {
-		setter({ duration: time });
+	loaderDuration: 0,
+	setLoaderDuration(time: number) {
+		setter({ loaderDuration: time });
 	},
 }));
 
@@ -21,51 +22,64 @@ export interface Props {
 }
 export default function withLoader<T extends object>(Component: React.ComponentType<T>) {
 	function HOC(props: T) {
-		const [isActive, setActive] = React.useState<boolean>(true);
-		const { duration } = useLoader();
-		const scope = React.useRef<HTMLDivElement>(null);
+		const scope = React.useRef<HTMLElement>(null);
+		const { loaderDuration } = useLoader();
 
 		useGSAP(
-			(_, contextSafe) => {
-				if (contextSafe && scope.current) {
-					const init = contextSafe(() => {
-						const loader: HTMLDivElement[] = gsap.utils.toArray('[data-loader]');
-						const stagger = {
-							each: 0.5,
-							amount: 1,
-						};
-						if (duration > 0) {
-							gsap.from(loader, {
-								height: '0%',
-								autoAlpha: 0,
-								stagger,
-							});
-						}
-						gsap.to(loader, 1, {
-							height: '0%',
-							ease: 'sine.inOut',
-							autoAlpha: 0,
-							delay: duration,
-							onComplete: () => {
-								setActive(false);
-							},
-							stagger,
-						});
-					});
+			() => {
+				const firstLoader = scope.current!.querySelectorAll(
+					'.loader--first > .loader--item',
+				);
+				const secondLoader = scope.current!.querySelectorAll(
+					'.loader--second > .loader--item',
+				);
 
-					init();
-					window.addEventListener('resize', init);
-					return window.removeEventListener('resize', init);
-				}
+				const loaderAnimation = {
+					duration: 1.5,
+					delay: loaderDuration > 0 ? loaderDuration - 1 : 0,
+					stagger: {
+						each: 0.25,
+						amount: 0.25,
+						from: 'center',
+					},
+				} satisfies GSAPTweenVars;
+
+				const timeline = gsap.timeline({
+					defaults: {
+						onComplete: () => {
+							const loader = scope.current?.querySelector('.loader--outer');
+							if (loader) {
+								scope.current?.removeChild(loader);
+							}
+						},
+					},
+				});
+
+				timeline.to(
+					firstLoader,
+					{
+						...loaderAnimation,
+						clipPath: 'inset(0% 0% 100% 0%)',
+					},
+					0,
+				);
+				timeline.to(
+					secondLoader,
+					{
+						...loaderAnimation,
+						clipPath: 'inset(100% 0% 0% 0%)',
+					},
+					0,
+				);
 			},
-			{ scope: scope, dependencies: [duration, isActive] },
+			{ scope },
 		);
 
 		return (
-			<>
-				{isActive && <Loader scope={scope} />}
+			<section ref={scope}>
+				<Loader />
 				<Component {...props} />
-			</>
+			</section>
 		);
 	}
 	return React.memo(HOC);

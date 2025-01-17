@@ -1,27 +1,43 @@
-import type React from 'react';
-import { type Props } from '.';
+import React from 'react';
+import './base.scss';
 
-const Loader: React.FC<Props> = ({ scope }) => {
-	const colors = ['#ffffff', '#fef100', '#00d1fe', '#14ff01', '#fa00ff', '#ff3400', '#0105ff'];
+const Loader: React.FC = () => {
+	const { colors } = React.useMemo(() => resources, []);
+
 	return (
-		<div
-			ref={scope}
-			className="h-svh w-full fixed top-0 z-50 flex">
-			{colors.map((color, key) => {
-				const CSSVariables = {
-					'--loader-width': `10%`,
-					'--loader-color': color,
-				} as React.CSSProperties;
-				return (
-					<div
-						data-loader
-						key={key}
-						style={CSSVariables}
-						className="w-[var(--loader-width)] h-full flex-grow bg-[var(--loader-color)]"
-					/>
-				);
-			})}
+		<div className="loader--outer">
+			<div className="loader--inner loader--first">
+				{colors.map((color, key) => {
+					const CSSVariables = {
+						'--loader-color': color,
+					} as React.CSSProperties;
+					return (
+						<div
+							key={key}
+							style={CSSVariables}
+							className="loader--item"
+						/>
+					);
+				})}
+			</div>
+			<div className="loader--inner loader--second">
+				{colors.map((color, key) => {
+					const CSSVariables = {
+						'--loader-color': color,
+					} as React.CSSProperties;
+					return (
+						<div
+							key={key}
+							style={CSSVariables}
+							className="loader--item"
+						/>
+					);
+				})}
+			</div>
 		</div>
 	);
 };
 export default Loader;
+const resources = {
+	colors: ['#ffffff', '#fef100', '#00d1fe', '#14ff01', '#fa00ff', '#ff3400', '#0105ff'],
+};

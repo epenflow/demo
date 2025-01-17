@@ -11,7 +11,9 @@ interface Props {
 }
 const Base: React.FC<Props> = ({ scope }) => {
 	return (
-		<main ref={scope}>
+		<main
+			data-content
+			ref={scope}>
 			{Object.entries(resources).map(([id, items]) => (
 				<article
 					key={id}

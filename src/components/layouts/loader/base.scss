@@ -1,0 +1,39 @@
+@use 'tailwindcss/components';
+
+
+:root {
+    --loader-zIndex: 999;
+    --loader-axis: 50%;
+    --loader-itemColor: white;
+    --loader-width: 10%;
+    --loader-height: 100%;
+}
+
+@layer components {
+    .loader--outer {
+        height: 100svh;
+        width: 100%;
+        position: fixed;
+        top: 0%;
+        left: var(--loader-axis);
+        transform: translate(calc(-1 * var(--loader-axis)), 0%);
+        z-index: var(--loader-zIndex);
+        display: flex;
+        flex-direction: column;
+
+        .loader--inner {
+            height: 100%;
+            width: 100%;
+            display: flex;
+
+            .loader--item {
+                height: var(--loader-height);
+                width: var(--loader-width);
+                background-color: var(--loader-color);
+                flex-grow: 1;
+            }
+        }
+
+
+    }
+}

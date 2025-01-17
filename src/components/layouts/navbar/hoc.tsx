@@ -1,9 +1,9 @@
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import React from 'react';
-import { useLoader } from '~/components/layouts/loader';
 import HeaderAnimator from '~/libs/modules/header-animator';
 import TextAnimator from '~/libs/modules/text-animator';
+import { useLoader } from '../loader';
 export interface Props {
 	scope: React.RefObject<HTMLElement>;
 	fnToggleMenu: () => void;
@@ -13,7 +13,7 @@ export default function hoc<T extends object>(Component: React.ComponentType<T &
 		const scope = React.useRef<HTMLElement>(null);
 		const headerTimeline = React.useRef<GSAPTimeline | null>(null);
 		const [isTrigger, setTrigger] = React.useState<boolean>(false);
-		const { setDuration } = useLoader();
+		const { setLoaderDuration } = useLoader();
 		useGSAP(
 			(_, contextSafe) => {
 				if (!contextSafe) return;
@@ -38,13 +38,13 @@ export default function hoc<T extends object>(Component: React.ComponentType<T &
 		React.useEffect(() => {
 			if (isTrigger) {
 				headerTimeline.current?.play();
-				window.document.body.style.overflow = 'hidden';
+				document.body.style.overflow = 'hidden';
 			} else {
-				setDuration(headerTimeline.current?.duration() || 0);
-				window.document.body.style.overflow = 'unset';
+				document.body.style.overflow = 'unset';
+				setLoaderDuration(headerTimeline.current?.duration() || 0);
 				headerTimeline.current?.reverse();
 			}
-		}, [isTrigger, setDuration]);
+		}, [isTrigger, setLoaderDuration]);
 
 		const fnToggleMenu = React.useCallback(() => {
 			setTrigger((prev) => !prev);
