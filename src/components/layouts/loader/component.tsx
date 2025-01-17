@@ -1,38 +1,34 @@
 import React from 'react';
+import { type Props } from '.';
 import './base.scss';
 
-const Loader: React.FC = () => {
-	const { colors } = React.useMemo(() => resources, []);
+const Loader: React.FC<Props> = ({ scope }) => {
+	const { colors } = resources;
+
+	const LoaderItem = () => {
+		return colors.map((color, key) => {
+			const CSSVariables = {
+				'--loader-color': color,
+			} as React.CSSProperties;
+			return (
+				<div
+					key={key}
+					style={CSSVariables}
+					className="loader--item"
+				/>
+			);
+		});
+	};
 
 	return (
-		<div className="loader--outer">
+		<div
+			ref={scope}
+			className="loader--outer">
 			<div className="loader--inner loader--first">
-				{colors.map((color, key) => {
-					const CSSVariables = {
-						'--loader-color': color,
-					} as React.CSSProperties;
-					return (
-						<div
-							key={key}
-							style={CSSVariables}
-							className="loader--item"
-						/>
-					);
-				})}
+				<LoaderItem />
 			</div>
 			<div className="loader--inner loader--second">
-				{colors.map((color, key) => {
-					const CSSVariables = {
-						'--loader-color': color,
-					} as React.CSSProperties;
-					return (
-						<div
-							key={key}
-							style={CSSVariables}
-							className="loader--item"
-						/>
-					);
-				})}
+				<LoaderItem />
 			</div>
 		</div>
 	);

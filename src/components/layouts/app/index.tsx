@@ -1,4 +1,4 @@
-import { Outlet } from '@tanstack/react-router';
+import { Outlet, ScrollRestoration } from '@tanstack/react-router';
 import React from 'react';
 import { isProduction } from '~/libs/utils';
 
@@ -9,6 +9,7 @@ const App = () => {
 			<Lenis root>
 				<Navbar />
 				<Outlet />
+				<ScrollRestoration />
 				<DisableReactDevtools condition={isProduction()} />
 				<TanstackRouterDevtools />
 			</Lenis>

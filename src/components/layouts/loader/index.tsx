@@ -2,9 +2,7 @@ import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import React from 'react';
 import { create } from 'zustand';
-
-const Loader = React.lazy(() => import('~/components/layouts/loader/component'));
-
+import Loader from '~/components/layouts/loader/component';
 interface LoaderContext {
 	loaderDuration: number;
 	setLoaderDuration: (time: number) => void;
@@ -22,64 +20,49 @@ export interface Props {
 }
 export default function withLoader<T extends object>(Component: React.ComponentType<T>) {
 	function HOC(props: T) {
-		const scope = React.useRef<HTMLElement>(null);
+		const scope = React.useRef<HTMLDivElement>(null);
+		const [isLoader, setLoader] = React.useState<boolean>(true);
 		const { loaderDuration } = useLoader();
 
 		useGSAP(
 			() => {
-				const firstLoader = scope.current!.querySelectorAll(
-					'.loader--first > .loader--item',
-				);
-				const secondLoader = scope.current!.querySelectorAll(
-					'.loader--second > .loader--item',
-				);
+				if (scope.current) {
+					const firstLoader = scope.current!.querySelectorAll(
+						'.loader--first > .loader--item',
+					);
+					const secondLoader = scope.current!.querySelectorAll(
+						'.loader--second > .loader--item',
+					);
 
-				const loaderAnimation = {
-					duration: 1.5,
-					delay: loaderDuration > 0 ? loaderDuration - 1 : 0,
-					stagger: {
-						each: 0.25,
-						amount: 0.25,
-						from: 'center',
-					},
-				} satisfies GSAPTweenVars;
-
-				const timeline = gsap.timeline({
-					defaults: {
-						onComplete: () => {
-							const loader = scope.current?.querySelector('.loader--outer');
-							if (loader) {
-								scope.current?.removeChild(loader);
-							}
+					const loaderAnimation = {
+						duration: 1.5,
+						delay: loaderDuration > 0 ? loaderDuration - 1 : 0,
+						stagger: {
+							each: 0.25,
+							amount: 1,
+							from: 'center',
 						},
-					},
-				});
+					} satisfies GSAPTweenVars;
 
-				timeline.to(
-					firstLoader,
-					{
+					gsap.to(firstLoader, {
 						...loaderAnimation,
 						clipPath: 'inset(0% 0% 100% 0%)',
-					},
-					0,
-				);
-				timeline.to(
-					secondLoader,
-					{
+					});
+					gsap.to(secondLoader, {
 						...loaderAnimation,
 						clipPath: 'inset(100% 0% 0% 0%)',
-					},
-					0,
-				);
+						onComplete: () => setLoader(false),
+					});
+				}
 			},
-			{ scope },
+			{ scope, dependencies: [loaderDuration, setLoader] },
 		);
 
 		return (
-			<section ref={scope}>
-				<Loader />
+			<>
+				{isLoader ? <Loader scope={scope} /> : null}
 				<Component {...props} />
-			</section>
+			</>
 		);
 	}
 	return React.memo(HOC);
