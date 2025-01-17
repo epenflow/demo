@@ -44,5 +44,9 @@ const resources = {
 			to: '/about',
 			title: 'About',
 		},
+		{
+			to: '/clip-path-scroll',
+			title: 'Clip Path Scroll',
+		},
 	] satisfies Array<{ to: FileRouteTypes['to']; title: string }>,
 };

@@ -16,10 +16,19 @@ import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
+const ClipPathScrollLazyImport = createFileRoute('/clip-path-scroll')()
 const AboutLazyImport = createFileRoute('/about')()
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
+
+const ClipPathScrollLazyRoute = ClipPathScrollLazyImport.update({
+  id: '/clip-path-scroll',
+  path: '/clip-path-scroll',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/clip-path-scroll.lazy').then((d) => d.Route),
+)
 
 const AboutLazyRoute = AboutLazyImport.update({
   id: '/about',
@@ -51,6 +60,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutLazyImport
       parentRoute: typeof rootRoute
     }
+    '/clip-path-scroll': {
+      id: '/clip-path-scroll'
+      path: '/clip-path-scroll'
+      fullPath: '/clip-path-scroll'
+      preLoaderRoute: typeof ClipPathScrollLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -59,36 +75,41 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
+  '/clip-path-scroll': typeof ClipPathScrollLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
+  '/clip-path-scroll': typeof ClipPathScrollLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
+  '/clip-path-scroll': typeof ClipPathScrollLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths: '/' | '/about' | '/clip-path-scroll'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to: '/' | '/about' | '/clip-path-scroll'
+  id: '__root__' | '/' | '/about' | '/clip-path-scroll'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   AboutLazyRoute: typeof AboutLazyRoute
+  ClipPathScrollLazyRoute: typeof ClipPathScrollLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   AboutLazyRoute: AboutLazyRoute,
+  ClipPathScrollLazyRoute: ClipPathScrollLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -102,7 +123,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/about"
+        "/about",
+        "/clip-path-scroll"
       ]
     },
     "/": {
@@ -110,6 +132,9 @@ export const routeTree = rootRoute
     },
     "/about": {
       "filePath": "about.lazy.tsx"
+    },
+    "/clip-path-scroll": {
+      "filePath": "clip-path-scroll.lazy.tsx"
     }
   }
 }

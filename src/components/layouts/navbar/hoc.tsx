@@ -44,7 +44,6 @@ export default function hoc<T extends object>(Component: React.ComponentType<T &
 				window.document.body.style.overflow = 'unset';
 				headerTimeline.current?.reverse();
 			}
-			console.log({ isTrigger, headerTimeline });
 		}, [isTrigger, setDuration]);
 
 		const fnToggleMenu = React.useCallback(() => {
