@@ -1,8 +1,6 @@
 import { useGSAP } from '@gsap/react';
-import gsap from 'gsap';
 import React from 'react';
 import HeaderAnimator from '~/libs/modules/header-animator';
-import TextAnimator from '~/libs/modules/text-animator';
 import { useLoader } from '../loader';
 export interface Props {
 	scope: React.RefObject<HTMLElement>;
@@ -22,15 +20,18 @@ export default function hoc<T extends object>(Component: React.ComponentType<T &
 					headerTimeline.current = header.timeline;
 				}
 
-				const textContent: HTMLElement[] = gsap.utils.toArray('.text--content');
-				textContent.forEach((text) => {
-					const animator = new TextAnimator(text);
-					const animate = contextSafe(() => {
-						animator.animate();
-					});
-					text.addEventListener('mouseenter', animate);
-					return () => text.removeEventListener('mouseenter', animate);
-				});
+				/**
+				 * issue can't select .text--content
+				 */
+				// const textContent: HTMLElement[] = gsap.utils.toArray('.text--content');
+				// textContent.forEach((text) => {
+				// 	const animator = new TextAnimator(text);
+				// 	const animate = contextSafe(() => {
+				// 		animator.animate();
+				// 	});
+				// 	text.addEventListener('mouseenter', animate);
+				// 	return () => text.removeEventListener('mouseenter', animate);
+				// });
 			},
 			{ scope },
 		);

@@ -3,7 +3,6 @@ import { Link } from '@tanstack/react-router';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import React from 'react';
 import useTime from '~/hooks/use-time';
-import type { FileRouteTypes } from '~/routeTree.gen';
 import './base.scss';
 import hoc, { type Props } from './hoc';
 
@@ -99,8 +98,13 @@ const generateRandomTitle = () => {
 	const randomNoun = nouns[Math.floor(Math.random() * nouns.length)];
 	return `${randomAdjective} ${randomNoun}`;
 };
+function getRandomTo() {
+	const to = ['/', '/about', '/clip-path-scroll'];
+	const randomTon = to[Math.floor(Math.random() * to.length)];
+	return randomTon;
+}
 const navigation = Array.from({ length: 10000 }).map(() => ({
-	to: '/clip-path-scroll' satisfies FileRouteTypes['to'],
+	to: getRandomTo(),
 	title: generateRandomTitle(),
 }));
 
