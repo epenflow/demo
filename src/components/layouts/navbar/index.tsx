@@ -90,7 +90,7 @@ const resources = {
 };
 function getRandomNavigation(length: number) {
 	const title = ['home', 'about', 'clip path scroll'];
-	const to = ['/', '/about', '/clip-path-scroll'];
+	const to = ['/', '/about'];
 
 	return Array.from({ length }).map(() => ({
 		title: title[Math.floor(Math.random() * title.length)],
@@ -121,9 +121,19 @@ const VirtualLink: React.FC<{
 		const context = gsap.context(() => {
 			if (scope.current) {
 				const text = scope.current.querySelector('.text--content') as HTMLElement;
+				const spans: HTMLSpanElement[] = gsap.utils.toArray('span');
 				const textAnimator = new TextAnimator(text);
 				scope.current.addEventListener('mouseenter', () => {
 					textAnimator.animate();
+				});
+				spans.forEach((span) => {
+					gsap.from(span, {
+						yPercent: -100,
+						xPercent: -100,
+						rotateY: 45,
+						ease: 'sine.inOut',
+						stagger: { each: 0.25, amount: 0.25 },
+					});
 				});
 			}
 		}, scope);

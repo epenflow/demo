@@ -118,6 +118,11 @@
                                 height: 1px;
                                 width: 100%;
                             }
+
+                            span {
+                                display: inline-block;
+                                will-change: transform;
+                            }
                         }
 
                         &.active {
