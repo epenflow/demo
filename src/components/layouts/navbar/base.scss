@@ -1,4 +1,5 @@
 @use 'tailwindcss/components';
+@use 'tailwindcss/utilities';
 
 :root {
     --header-padding: 0.5rem;
@@ -11,7 +12,13 @@
     --header-contentTop: calc(var(--button-size) + var(--header-padding));
     --header-contentWidth: calc(100% - calc(var(--header-padding) * 2));
     --header-contentHeight: calc(100% - calc(var(--header-contentTop) + calc(var(--header-padding) * 2)));
+    --header-contentPadding: 0rem calc(var(--header-padding) * 2);
+    --virtual-height: auto;
+
 }
+
+
+
 
 @layer components {
 
@@ -48,66 +55,169 @@
 
         .header--content {
             position: absolute;
-            width: var(--header-contentWidth);
-            height: var(--header-contentHeight);
+            width: 100%;
+            max-height: var(--header-contentHeight);
+            height: 100%;
             top: var(--header-contentTop);
             left: var(--header-axis);
             transform: translate(calc(-1 * var(--header-axis)), 0%);
-            padding: 0rem calc(var(--header-padding) * 2);
             margin: var(--header-padding) 0rem;
             display: flex;
             flex-direction: column;
-            gap: 0.25rem;
-            overflow-y: scroll;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
 
-            &::-webkit-scrollbar-thumb {
+            .separator {
                 @apply bg-white/10;
-                border: 4px solid transparent;
-                border-radius: var(--header-radius);
-                min-height: calc(var(--header-contentHeight) / 2);
-                background-clip: content-box;
+                display: block;
+                height: 1px;
+                width: 100%;
+                margin: var(--header-padding) 0rem;
             }
 
-            &::-webkit-scrollbar {
-                width: var(--button-size);
-                background-color: transparent;
+            .time--content {
+                @apply text-transparent bg-clip-text bg-gradient-to-b via-slate-100 from-slate-100 to-indigo-600 text-xs font-bold;
+                width: var(--header-contentWidth);
+                padding: var(--header-contentPadding);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
             }
 
-            a {
+            .navigation--content {
+                height: 100%;
+                width: 100%;
+                max-width: var(--header-contentWidth);
+                padding: var(--header-contentPadding);
+                overflow-y: scroll;
 
-                .text--content {
-                    @apply text-white/70 transition-colors duration-500 ease-in-out font-medium;
-                }
-
-                .separator {
-                    @apply bg-white/10 transition-colors duration-500 ease-in-out;
-                    display: block;
-                    width: 100%;
-                    height: 1px;
-                }
-
-                &.active {
-                    .text--content {
-                        @apply text-transparent bg-clip-text bg-gradient-to-b via-slate-100 from-slate-100 to-indigo-600;
-                    }
-
-                    .separator {
-                        @apply bg-gradient-to-l from-slate-100 to-indigo-600;
-                    }
-                }
-
-                p {
-                    height: fit-content;
-                    overflow: hidden;
+                .virtual--container {
                     position: relative;
+                    height: var(--virtual-contentHeight);
+                    width: 100%;
 
-                    span {
-                        display: inline-block;
-                        will-change: transform;
+                    .virtual--item {
+                        position: absolute;
+                        width: 100%;
+                        top: 0px;
+                        left: 0px;
+                        transform: translate(0px, var(--virtual-yAxis));
+                        height: var(--virtual-height);
+                        display: flex;
+                        align-items: center;
+
+                        .paragraph--content {
+                            @apply space-y-2;
+                            width: 100%;
+
+                            .link--separator {
+                                @apply bg-white/10;
+                                display: block;
+                                height: 1px;
+                                width: 100%;
+                            }
+                        }
+
+                        &.active {
+                            .text--content {
+                                @apply text-transparent bg-clip-text bg-gradient-to-b via-slate-100 from-slate-100 to-indigo-600;
+                            }
+
+                            .link--separator {
+                                @apply bg-gradient-to-l from-slate-100 to-indigo-600;
+                            }
+                        }
                     }
 
+                }
+
+
+                &::-webkit-scrollbar {
+                    width: var(--button-size);
+                    background-color: transparent;
+                    border: 1px solid rgb(255 255 255 / 0.1);
+                    border-radius: var(--header-radius);
+                }
+
+                &::-webkit-scrollbar-thumb {
+                    @apply bg-white/10;
+                    height: calc(var(--button-size) * 4);
+                    border-radius: var(--header-radius);
+                    border: 4px solid transparent;
+                    background-clip: content-box;
                 }
             }
         }
     }
 }
+
+// .navigation--content {
+//     max-height: 100%;
+//     height: 100%;
+//     max-width: var(--header-contentWidth);
+//     width: 100%;
+//     padding: var(--header-contentPadding);
+//     overflow-x: hidden;
+//     overflow-y: scroll;
+//     display: flex;
+//     flex-direction: column;
+//     gap: 0.25rem;
+//     position: relative;
+
+//     &::-webkit-scrollbar-thumb {
+//         @apply bg-white/10;
+//         border: 4px solid transparent;
+//         border-radius: var(--header-radius);
+//         min-height: calc(var(--header-contentHeight) / 2);
+//         background-clip: content-box;
+//     }
+
+//     &::-webkit-scrollbar {
+//         width: var(--button-size);
+//         background-color: transparent;
+//     }
+
+//     a {
+//         position: absolute;
+//         top: 0px;
+//         left: 0px;
+//         height: var(--virtual-height);
+//         transform: translate(0px, var(--virtual-yAxis));
+
+//         .text--content {
+//             @apply text-white/70 transition-colors duration-500 ease-in-out font-medium;
+//         }
+
+//         .link--separator {
+//             @apply bg-white/10 transition-colors duration-500 ease-in-out;
+//             display: block;
+//             width: 100%;
+//             height: 1px;
+//         }
+
+//         &.active {
+//             .text--content {
+//                 @apply text-transparent bg-clip-text bg-gradient-to-b via-slate-100 from-slate-100 to-indigo-600;
+//             }
+
+//             .link--separator {
+//                 @apply bg-gradient-to-l from-slate-100 to-indigo-600;
+//             }
+//         }
+
+//         p {
+//             height: fit-content;
+//             overflow: hidden;
+//             position: relative;
+
+//             span {
+//                 display: inline-block;
+//                 will-change: transform;
+//             }
+
+//         }
+//     }
+
+// }

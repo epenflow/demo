@@ -19,7 +19,7 @@ export default class HeaderAnimator {
 		const button = this.#scope?.querySelector('button');
 		const headerInner = this.#scope?.querySelector('.header--inner');
 		const headerContent = this.#scope?.querySelector('.header--content');
-		const span = this.#scope?.querySelectorAll('span');
+		const span = this.#scope?.querySelectorAll('.paragraph--content > span');
 		if (
 			button &&
 			headerInner &&
@@ -28,6 +28,7 @@ export default class HeaderAnimator {
 			typeof this.#timeline !== 'undefined' &&
 			typeof this.#scope !== 'undefined'
 		) {
+			console.log(span);
 			const position = [0, 0.5] as const;
 			this.#timeline.to(headerInner, { '--header-width': '20rem' }, position[0]);
 			this.#timeline.to(button, { left: `calc(20rem - 1rem)`, ease: 'linear' }, position[1]);
