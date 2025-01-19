@@ -119,6 +119,10 @@
                                 width: 100%;
                             }
 
+                            .text--content {
+                                @apply line-clamp-1;
+                            }
+
                             span {
                                 display: inline-block;
                                 will-change: transform;

@@ -4,6 +4,10 @@ import { isProduction } from '~/libs/utils';
 
 const App = () => {
 	const { Navbar, DisableReactDevtools, TanstackRouterDevtools, Lenis } = resources;
+	console.log(
+		'%c--EF@epenflow///',
+		'color:#00ff00;font-family:system-ui;font-size:4rem;font-weight:bold',
+	);
 	return (
 		<React.Suspense>
 			<Lenis root>

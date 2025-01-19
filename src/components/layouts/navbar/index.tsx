@@ -6,6 +6,7 @@ import React from 'react';
 import useTime from '~/hooks/use-time';
 import HeaderAnimator from '~/libs/modules/header-animator';
 import TextAnimator from '~/libs/modules/text-animator';
+import { isProduction } from '~/libs/utils';
 import type { FileRouteTypes } from '~/routeTree.gen';
 import { useLoader } from '../loader';
 import './base.scss';
@@ -23,7 +24,7 @@ const Navbar: React.FC = () => {
 		count: navigation.length,
 		getScrollElement: () => virtualRef.current,
 		estimateSize: () => 35,
-		debug: true,
+		debug: !isProduction(),
 	});
 	const CSSVariables = {
 		'--virtual-contentHeight': `${virtualizer.getTotalSize()}px`,
@@ -83,7 +84,11 @@ const Navbar: React.FC = () => {
 	);
 };
 const resources = {
-	navigation: [{ title: 'Home', to: '/' }, ...getRandomNavigation(10_000)] satisfies Array<{
+	navigation: [
+		{ title: 'Home', to: '/' },
+		{ title: 'Clip Path Scroll', to: '/clip-path-scroll' },
+		...getRandomNavigation(10_000),
+	] satisfies Array<{
 		title: string;
 		to: FileRouteTypes['to'];
 	}>,
@@ -148,9 +153,7 @@ const VirtualLink: React.FC<{
 			className="virtual--item"
 			style={CSSVariables}>
 			<p className="paragraph--content">
-				<span className="text--content">
-					{navigation[virtual.index].title}&nbsp;{virtual.index}
-				</span>
+				<span className="text--content">{navigation[virtual.index].title}</span>
 				<span className="link--separator" />
 			</p>
 		</Link>

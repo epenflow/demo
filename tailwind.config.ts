@@ -2,7 +2,15 @@ import { Config } from 'tailwindcss';
 export default {
 	content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
 	theme: {
-		extend: {},
+		extend: {
+			container: {
+				center: true,
+				padding: '2rem',
+				screens: {
+					'2xl': '1400px',
+				},
+			},
+		},
 	},
 	plugins: [],
 } satisfies Config;
