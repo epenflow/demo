@@ -46,3 +46,9 @@ export const debounce = <T extends (...args: any[]) => void>(fn: T, delay: numbe
 		}, delay);
 	};
 };
+
+import { ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+export function cn(...args: ClassValue[]) {
+	return twMerge(clsx(args));
+}
