@@ -64,7 +64,7 @@ const FPSStats: React.FC<Partial<Props>> = ({
 					ref={canvasRef}
 					height={$height}
 					width={$width}
-					className="bg-indigo-600/10 relative border border-white/10"
+					className="bg-indigo-600/10 relative border border-white/10 rounded-[0.25rem]"
 				/>
 			</div>
 		);
