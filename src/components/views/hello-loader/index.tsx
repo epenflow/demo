@@ -6,7 +6,7 @@ import { isProduction } from '~/libs/utils';
 gsap.registerPlugin(TextPlugin, ScrollTrigger);
 
 const HelloLoader = () => {
-	const { words } = resources;
+	const { words, CSSVariables } = resources;
 	const date = new Date();
 	const scope = React.useRef<HTMLElement>(null);
 
@@ -31,39 +31,33 @@ const HelloLoader = () => {
 			});
 
 			const texts: HTMLElement[] = gsap.utils.toArray('[data-text]');
-			texts.forEach((text, index) => {
+			texts.forEach((text) => {
 				const splitText = new SplitType(text, {
-					types: 'words',
-					wordClass: 'leading-normal',
+					types: 'chars',
+					tagName: 'span',
+					charClass:
+						'text-transparent bg-clip-text bg-cover [background-image:var(--noise-texture)] bg-slate-100 leading-normal',
 				});
-				gsap.fromTo(
-					splitText.words,
-					{
-						overflow: 'hidden',
-						opacity: 0.5,
-						yPercent: 0 >= index ? 0 : -25,
-						scale: 0 >= index ? 1 : 0.75,
-						filter: 'blur(0.25rem) brightness(50%)',
+				const chars = splitText.chars;
+				gsap.set(chars, {
+					transform: `scaleY(0.1) scaleX(1.8)`,
+					filter: 'blur(10px) brightness(50%)',
+					willChange: 'filter, transform',
+				});
+				gsap.to(chars, {
+					ease: 'none',
+					transform: `scaleY(1) scaleX(1)`,
+					filter: 'blur(0px) brightness(100%)',
+					stagger: 0.01,
+					force3D: false,
+					scrollTrigger: {
+						trigger: text,
+						start: 'top bottom-=15%',
+						end: 'bottom center+=15%',
+						scrub: 1.5,
+						markers: !isProduction(),
 					},
-					{
-						yPercent: 0,
-						opacity: 1,
-						scale: 1,
-						filter: 'blur(0rem)  brightness(100%)',
-						ease: 'sine.inOut',
-						stagger: {
-							each: 0.25,
-							amount: 0.5,
-						},
-						scrollTrigger: {
-							trigger: text,
-							start: 'top center',
-							end: 'center center',
-							scrub: 1.5,
-							markers: !isProduction(),
-						},
-					},
-				);
+				});
 			});
 		}, scope);
 		return () => context.revert();
@@ -71,6 +65,7 @@ const HelloLoader = () => {
 
 	return (
 		<main
+			style={CSSVariables}
 			ref={scope}
 			className="overflow-hidden">
 			<section className="h-svh w-full flex items-center justify-center text-4xl font-medium">
@@ -101,10 +96,10 @@ const HelloLoader = () => {
 					<span className="block h-[1px] w-full bg-white/10" />
 				</div>
 			</section>
-			<footer className="container my-14 text-center font-medium">
+			<footer className="container mt-52 mb-10 text-center font-medium">
 				<a
 					href="https://www.instagram.com/epenflow/"
-					className="text-transparent bg-clip-text bg-gradient-to-tr from-slate-100 to-blue-700">
+					className="text-transparent bg-clip-text bg-gradient-to-tr from-slate-100 to-blue-600">
 					--EF@epenflow//{date.getUTCFullYear().toString().slice(2)}
 				</a>
 			</footer>
@@ -113,6 +108,9 @@ const HelloLoader = () => {
 };
 export default HelloLoader;
 const resources = {
+	CSSVariables: {
+		'--noise-texture': `url('https://ucarecdn.com/76ad4f2e-f2ad-4cd9-a9bd-8f4198ab7443/noise.png')`,
+	} as React.CSSProperties,
 	words: [
 		'Hello',
 		'Bonjour',
