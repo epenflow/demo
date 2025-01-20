@@ -13,6 +13,7 @@ const Lenis: React.FC<
 		function update(time: number) {
 			lenisRef.current?.lenis?.raf(time * framerate);
 		}
+		gsap.ticker.lagSmoothing(0);
 		gsap.ticker.add(update);
 		return () => gsap.ticker.remove(update);
 	}, [framerate]);
