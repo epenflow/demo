@@ -70,9 +70,15 @@ const HelloLoader = () => {
 	}, [words]);
 
 	return (
-		<main ref={scope}>
+		<main
+			ref={scope}
+			className="overflow-hidden">
 			<section className="h-svh w-full flex items-center justify-center text-4xl font-medium">
-				<q data-hello>{words[0]}</q>
+				<q
+					data-hello
+					className="leading-normal">
+					{words[0]}
+				</q>
 			</section>
 			<section className="h-full container space-y-4 text-xl lg:text-4xl">
 				<h1 data-text>--EF@Word__Hello</h1>
@@ -96,7 +102,9 @@ const HelloLoader = () => {
 				</div>
 			</section>
 			<footer className="container my-14 text-center font-medium">
-				<a href="https://www.instagram.com/epenflow/">
+				<a
+					href="https://www.instagram.com/epenflow/"
+					className="text-transparent bg-clip-text bg-gradient-to-tr from-slate-100 to-blue-700">
 					--EF@epenflow//{date.getUTCFullYear().toString().slice(2)}
 				</a>
 			</footer>
