@@ -84,7 +84,6 @@ function render(
 	},
 ) {
 	if (!context) return;
-	let color: string = COLORS.red;
 	const { height, width } = data;
 	const { fps, max, len } = data.FPSData;
 
@@ -93,11 +92,14 @@ function render(
 	fps.map((frame, index) => {
 		const line = { width: 1, height: (height * frame) / max };
 		const position = { x: len - 1 - index, y: height - line.height };
+		let color: string = COLORS.green;
 
 		if (frame > 60) {
 			color = COLORS.green;
 		} else if (frame > 30) {
 			color = COLORS.yellow;
+		} else {
+			color = COLORS.red;
 		}
 
 		context.fillStyle = color;
