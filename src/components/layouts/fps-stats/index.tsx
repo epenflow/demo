@@ -36,10 +36,12 @@ const FPSStats: React.FC<Partial<Props>> = ({
 		const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
 		const spanRef = React.useRef<HTMLSpanElement | null>(null);
 		React.useEffect(() => {
+			console.log('inside useEffect');
 			const worker = new Worker(new URL('./worker.ts', import.meta.url));
-			worker.onmessage = (event: MessageEvent<{ fps: string }>) => {
+			worker.onmessage = (event: MessageEvent<{ fps: number; avg: number }>) => {
+				const { avg, fps } = event.data;
 				if (spanRef.current) {
-					spanRef.current.innerHTML = event.data.fps;
+					spanRef.current.textContent = `${fps} Fps (${avg} Avg)`;
 				}
 			};
 			if (canvasRef.current) {
@@ -48,9 +50,11 @@ const FPSStats: React.FC<Partial<Props>> = ({
 			}
 			return () => {
 				worker.terminate();
+				console.log('return useEffect');
 			};
 		}, [$height, $width]);
 
+		console.log('outside useEffect');
 		return (
 			<div
 				style={CSSVariables}

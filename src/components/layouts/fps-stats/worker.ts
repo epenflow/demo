@@ -1,3 +1,19 @@
+interface State {
+	max: number;
+	len: number;
+	fps: number[];
+	frames: number;
+	prevTime: number;
+	width: number;
+	avg: number;
+	totalTime: number;
+	totalFrames: number;
+}
+const COLORS = {
+	red: 'rgba(255, 0, 0, 0.5)',
+	green: 'rgba(0, 255, 0, 0.5)',
+	yellow: 'rgba(255, 255, 0, 0.5)',
+};
 self.onmessage = function (
 	event: MessageEvent<{
 		height: number;
@@ -12,47 +28,37 @@ self.onmessage = function (
 		fps: [],
 		frames: 0,
 		prevTime: 0,
-		width: width,
+		avg: 0,
+		totalFrames: 0,
+		totalTime: 0,
+		width,
 	};
+
 	const context = canvas.getContext('2d');
-	function RAF() {
-		FPSData = FPSReducer(FPSData);
-		self.postMessage({ fps: `${Math.round(FPSData.fps[FPSData.len - 1])} FPS` });
-		if (context) {
-			context.clearRect(0, 0, width, height);
-			FPSData.fps.map((frame, index) => {
-				const barHeight = (height * frame) / FPSData.max;
-				let color: string = 'rgba(255, 0, 0, 0.5)';
+	function update() {
+		FPSData = getFps(FPSData);
+		self.postMessage({
+			fps: Math.ceil(FPSData.fps[FPSData.len - 1]),
+			avg: Math.ceil(FPSData.avg),
+		});
 
-				if (frame > 60) {
-					color = 'rgba(0, 255, 0, 0.5)';
-				} else if (frame > 30) {
-					color = 'rgba(255, 255, 0, 0.5)';
-				}
-
-				context.fillStyle = color;
-				context.fillRect(FPSData.len - 1 - index, height - barHeight, 1, barHeight);
-			});
-		}
-		requestAnimationFrame(RAF);
+		render(context, { width, height, FPSData });
+		requestAnimationFrame(update);
 	}
-	requestAnimationFrame(RAF);
+	requestAnimationFrame(update);
 };
-interface State {
-	max: number;
-	len: number;
-	fps: number[];
-	frames: number;
-	prevTime: number;
-	width: number;
-}
-function FPSReducer(state: State): State {
+
+function getFps(state: State): State {
 	const currentTime = performance.now();
 	if (currentTime > state.prevTime + 1000) {
 		const nextFPS = [
 			...new Array(Math.floor((currentTime - state.prevTime - 1000) / 1000)).fill(0),
 			Math.max(1, Math.round(state.frames * 1000) / (currentTime - state.prevTime)),
 		];
+		const totalTime = state.totalTime + (currentTime - state.prevTime);
+		const totalFrames = state.totalFrames + state.frames;
+		const avg = (totalFrames * 1000) / totalTime;
+
 		return {
 			width: state.width,
 			max: Math.max(state.max, ...nextFPS),
@@ -60,8 +66,41 @@ function FPSReducer(state: State): State {
 			fps: [...state.fps, ...nextFPS].slice(-state.width),
 			frames: 1,
 			prevTime: performance.now(),
+			avg,
+			totalTime,
+			totalFrames,
 		};
 	} else {
 		return { ...state, frames: state.frames + 1 };
 	}
+}
+
+function render(
+	context: OffscreenCanvasRenderingContext2D | null,
+	data: {
+		width: number;
+		height: number;
+		FPSData: State;
+	},
+) {
+	if (!context) return;
+	let color: string = COLORS.red;
+	const { height, width } = data;
+	const { fps, max, len } = data.FPSData;
+
+	context.clearRect(0, 0, width, height);
+
+	fps.map((frame, index) => {
+		const line = { width: 1, height: (height * frame) / max };
+		const position = { x: len - 1 - index, y: height - line.height };
+
+		if (frame > 60) {
+			color = COLORS.green;
+		} else if (frame > 30) {
+			color = COLORS.yellow;
+		}
+
+		context.fillStyle = color;
+		context.fillRect(position.x, position.y, line.width, line.height);
+	});
 }
