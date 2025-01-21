@@ -33,21 +33,20 @@ const HelloLoader = () => {
 			const texts: HTMLElement[] = gsap.utils.toArray('[data-text]');
 			texts.forEach((text) => {
 				const splitText = new SplitType(text, {
-					types: 'chars',
-					tagName: 'span',
-					charClass:
+					types: 'words',
+					wordClass:
 						'text-transparent bg-clip-text bg-cover [background-image:var(--noise-texture)] bg-slate-100 leading-normal',
 				});
-				const chars = splitText.chars;
-				gsap.set(chars, {
-					transform: `scaleY(0.1) scaleX(1.8)`,
-					filter: 'blur(10px) brightness(50%)',
-					willChange: 'filter, transform',
+				const $textType = splitText.words;
+				gsap.set($textType, {
+					filter: 'blur(0.25rem)',
+					opacity: 0.75,
+					willChange: 'filter, transform,opacity',
 				});
-				gsap.to(chars, {
+				gsap.to($textType, {
 					ease: 'none',
-					transform: `scaleY(1) scaleX(1)`,
-					filter: 'blur(0px) brightness(100%)',
+					opacity: 1,
+					filter: 'blur(0rem)',
 					stagger: 0.01,
 					force3D: false,
 					scrollTrigger: {
