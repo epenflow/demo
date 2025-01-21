@@ -58,6 +58,28 @@ const HelloLoader = () => {
 					},
 				});
 			});
+
+			const marqueeTween = gsap
+				.to('[data-text-marquee]', {
+					xPercent: -100,
+					duration: 5,
+					repeat: -1,
+					ease: 'none',
+				})
+				.totalProgress(0.5);
+
+			ScrollTrigger.create({
+				trigger: '[data-hero]',
+				start: 'top top',
+				end: 'bottom',
+				markers: true,
+				onUpdate: (self: ScrollTrigger) => {
+					gsap.to(marqueeTween, {
+						timeScale: self.direction === -1 ? 1 : -1,
+						overwrite: true,
+					});
+				},
+			});
 		}, scope);
 		return () => context.revert();
 	}, [words]);
@@ -67,12 +89,29 @@ const HelloLoader = () => {
 			style={CSSVariables}
 			ref={scope}
 			className="overflow-hidden">
-			<section className="h-svh w-full flex items-center justify-center text-4xl font-medium">
-				<q
-					data-hello
-					className="leading-normal">
-					{words[0]}
-				</q>
+			<section
+				data-hero
+				className="relative w-full min-h-svh">
+				<div className="w-full h-svh flex items-center justify-center">
+					<q
+						data-hello
+						className="leading-normal text-4xl font-medium">
+						{words[0]}
+					</q>
+				</div>
+				<div className="absolute bottom-10 overflow-clip w-full">
+					<div
+						data-text-marquee
+						className="flex relative items-center justify-between w-full gap-2 font-medium">
+						{words.map((text, key) => (
+							<p
+								key={`${text}-${key}`}
+								className="flex-shrink-0">
+								{text}
+							</p>
+						))}
+					</div>
+				</div>
 			</section>
 			<section className="h-full container space-y-4 text-xl lg:text-4xl">
 				<h1 data-text>--EF@Word__Hello</h1>
@@ -81,16 +120,9 @@ const HelloLoader = () => {
 					<p
 						data-text
 						className="text-justify lg:text-pretty w-full h-fit overflow-hidden">
-						'Hello', 'Bonjour', 'Ciao', 'Olà', 'سلام', 'やあ', 'Hallå', 'Guten tag',
-						'Hola', 'Привет', '你好', '안녕하세요', 'สวัสดี', 'ਸਤ ਸ੍ਰੀ ਅਕਾਲ', 'ಹಲೋ',
-						'नमस्ते', 'Sveiki', 'Merhaba', 'Shalom', 'Γειά σου', 'Kia ora', 'ສະບາຍດີ',
-						'வணக்கம்', 'გამარჯობა', 'ជំរាបសួរ', 'Aloha', 'Zdravstvuyte', 'Hei',
-						'Sawubona', 'Terve', 'Moïen', 'Bula', 'Cześć', 'Kamusta', 'Sawasdee',
-						'Goddag', 'Bok', 'Halo', 'Sain baina uu', 'Góðan dag', 'Dzień dobry', 'Hei',
-						'Ni hao', 'Konnichiwa', 'Swastiastu', 'Mingalaba', 'Yassas', 'Vanakkam',
-						'Marhaba', 'Szia', 'Selamat pagi', 'God dag', 'Zdravstvujte', 'Sawadee',
-						'Namaskaram', 'Dia dhuit', 'Mhoro', 'Haloha', 'Pozdrav', 'Salam', 'Konnichi
-						wa', 'Sawatdee',
+						{words.map((text, key) => (
+							<span key={`${text}-${key}`}>“{text}”,</span>
+						))}
 					</p>
 					<span className="block h-[1px] w-full bg-white/10" />
 				</div>

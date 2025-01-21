@@ -4,8 +4,29 @@
 
 
 @layer utilities {
+    :root {
+        --scrollbar-size: 1rem;
+    }
+
     body {
         @apply bg-black text-white;
+
+        &::-webkit-scrollbar {
+            border: 1px solid rgb(255 255 255 / 0.1);
+            border-top: none;
+            border-bottom: none;
+            width: var(--scrollbar-size);
+            background-color: transparent;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            @apply bg-white/10;
+            height: calc(var(--scrollbar-size) * 4);
+            border-radius: var(--scrollbar-size);
+            border: 4px solid transparent;
+            background-clip: content-box;
+        }
+
     }
 
 }
